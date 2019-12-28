@@ -5,14 +5,17 @@
 
         <title>Chat App</title>
 
-        <script src = '/JS/Libraries/socket.io.js'></script>
-        <script src = '/JS/Libraries/react.js'></script>
-        <script src = '/JS/Libraries/react-dom.js'></script>
+        <script src = './JS/Libraries/socket.io.js'></script>
+        <script src = './JS/Libraries/react.js'></script>
+        <script src = './JS/Libraries/react-dom.js'></script>
+        <script src = './JS/Libraries/babel.js'></script>
+        <script type = "module">
+            import React from './JS/Libraries/react.js';
+            import ReactDOM from './JS/Libraries/react-dom.js';
+        </script>
+        <link rel="stylesheet" type="text/css" href="./CSs/Style.css">
     </head>
 
-    <body>
-        <h1>Chat</h1>
-    </body>
-
-    <script src = '/JS/Client.js'></script>
+    <script type = "text/babel" src = './JS/Client.js'></script>
+    <div id = "root"></div>
 </html>

@@ -1,7 +1,6 @@
+/** @jsx React.DOM */
+
 var Socket = io ();
-import React from 'react';
-import ReactDOM from 'react-dom';
-import '../CSS/Style.css';
 
 function Square(props) {
   return (
@@ -150,9 +149,9 @@ function calculateWinner(squares) {
   return null;
 }
 
-// ========================================
 
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
+const e = React.createElement;
+
+// ========================================
+const domContainer = document.querySelector('#root');
+ReactDOM.render(e(Game), domContainer);
