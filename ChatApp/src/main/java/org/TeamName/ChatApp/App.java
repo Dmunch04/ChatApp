@@ -5,7 +5,7 @@ import org.TeamName.ChatApp.Server.Server;
 public class App
 {
 
-    private static final String Host = "http://localhost";
+    private static final String Host = "localhost";
     private static final String Port = "6969";
 
     private static Server Instance;
