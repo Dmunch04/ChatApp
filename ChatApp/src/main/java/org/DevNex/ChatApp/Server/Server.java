@@ -1,4 +1,4 @@
-package org.TeamName.ChatApp.Server;
+package org.DevNex.ChatApp.Server;
 
 import com.corundumstudio.socketio.*;
 import express.Express;
@@ -14,16 +14,17 @@ public class Server
 
     private String Host;
     private String Port;
+    private String SocketPort;
 
-    public Server (String Host, String Port)
+    public Server (String Host, String Port, String SocketPort)
     {
         this.Host = Host;
         this.Port = Port;
+        this.SocketPort = SocketPort;
 
         Configuration Config = new Configuration ();
         Config.setHostname (Host);
-        Config.setPort (Integer.parseInt (Port));
-        // TODO: Fix this. It still won't work properly. I got it to work before moving into Server.java. Source: https://github.com/mrniko/netty-socketio/issues/490
+        Config.setPort (Integer.parseInt (SocketPort));
         SocketConfig SocketConfig = Config.getSocketConfig ();
         SocketConfig.setReuseAddress (true);
         Config.setSocketConfig (SocketConfig);

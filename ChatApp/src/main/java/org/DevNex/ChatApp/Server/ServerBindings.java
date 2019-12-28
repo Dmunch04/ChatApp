@@ -1,4 +1,4 @@
-package org.TeamName.ChatApp.Server;
+package org.DevNex.ChatApp.Server;
 
 import express.DynExpress;
 import express.http.request.Request;

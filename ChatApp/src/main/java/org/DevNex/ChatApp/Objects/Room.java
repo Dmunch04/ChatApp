@@ -1,4 +1,4 @@
-package org.TeamName.ChatApp.Objects;
+package org.DevNex.ChatApp.Objects;
 
 import java.util.List;
 import java.util.UUID;

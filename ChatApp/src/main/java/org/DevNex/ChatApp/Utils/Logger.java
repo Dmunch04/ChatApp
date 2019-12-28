@@ -1,4 +1,4 @@
-package org.TeamName.ChatApp.Utils;
+package org.DevNex.ChatApp.Utils;
 
 public class Logger
 {
