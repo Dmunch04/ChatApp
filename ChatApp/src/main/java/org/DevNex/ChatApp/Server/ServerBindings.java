@@ -12,7 +12,7 @@ public class ServerBindings
     @DynExpress (context = "/")
     public void GetIndex (Request Request, Response Response)
     {
-        Response.send (Paths.get (this.getClass ().getResource ("/Static/index.html").getPath ()));
+        Response.send (Paths.get (this.getClass ().getResource ("/Static/html/index.html").getPath ()));
     }
 
 }
