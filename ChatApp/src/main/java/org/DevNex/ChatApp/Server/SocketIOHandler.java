@@ -5,24 +5,36 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
-
-import org.DevNex.ChatApp.Objects.Data;
+import com.corundumstudio.socketio.listener.DisconnectListener;
+import org.DevNex.ChatApp.Objects.Data.*;
+import org.DevNex.ChatApp.Sessions.ActionType;
+import org.DevNex.ChatApp.Sessions.Session;
+import org.DevNex.ChatApp.Sessions.SessionTracker;
 
 public class SocketIOHandler
 {
 
+    private Server Instance;
     private SocketIOServer Server;
+    private SessionTracker Tracker;
 
-    public SocketIOHandler (SocketIOServer Server)
+    public SocketIOHandler (Server Instance, SocketIOServer Server)
     {
+        this.Instance = Instance;
         this.Server = Server;
+        this.Tracker = Instance.GetSessionTracker ();
 
         Listen ();
     }
 
+    /*
+        Send event + data to client:
+        Client.sendEvent ("event", DataClass);
+    */
+
     private void Listen ()
     {
-        Server.addConnectListener(new ConnectListener () {
+        Server.addConnectListener (new ConnectListener () {
             @Override
             public void onConnect (SocketIOClient Client)
             {
@@ -30,74 +42,94 @@ public class SocketIOHandler
             }
         });
 
-        Server.addEventListener (SocketIOEvents.LOGIN.GetEventName (), Data.class, new DataListener<Data> () {
+        Server.addDisconnectListener(new DisconnectListener() {
             @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
+            public void onDisconnect (SocketIOClient Client)
             {
+                if (Tracker.GetSession (Client.getSessionId ()) != null)
+                {
+                    Tracker.GetSession (Client.getSessionId ()).AddAction (ActionType.LOGOUT);
+                    Tracker.RemoveSessionBySessionID (Client.getSessionId ());
+                }
+            }
+        });
+
+        Server.addEventListener (SocketIOEvents.LOGIN.GetEventName (), LoginRegisterData.class, new DataListener<LoginRegisterData> () {
+            @Override
+            public void onData (SocketIOClient Client, LoginRegisterData Data, AckRequest Request)
+            {
+                // TODO: Login
+
+                // TODO: Replace the `""` with the users ID, obtained by getting from DB using the Token
+                Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
+
                 // TODO: Fix that every variable is always null in the data
-                System.out.println (Data);
+                System.out.println (Data.GetToken ());
             }
         });
 
-        Server.addEventListener (SocketIOEvents.REGISTER.GetEventName (), Data.class, new DataListener<Data> () {
+        Server.addEventListener (SocketIOEvents.REGISTER.GetEventName (), LoginRegisterData.class, new DataListener<LoginRegisterData> () {
             @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
+            public void onData (SocketIOClient Client, LoginRegisterData Data, AckRequest Request)
+            {
+                // TODO: Register
+
+                // TODO: Replace the `""` with the users ID, obtained by getting from DB using the Token
+                Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
+            }
+        });
+
+        Server.addEventListener (SocketIOEvents.REMOVE_USER.GetEventName (), RemoveUserData.class, new DataListener<RemoveUserData> () {
+            @Override
+            public void onData (SocketIOClient Client, RemoveUserData Data, AckRequest Request)
             {
 
             }
         });
 
-        Server.addEventListener (SocketIOEvents.REMOVE_USER.GetEventName (), Data.class, new DataListener<Data> () {
+        Server.addEventListener (SocketIOEvents.CREATE_ROOM.GetEventName (), CreateRoomData.class, new DataListener<CreateRoomData> () {
             @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
+            public void onData (SocketIOClient Client, CreateRoomData Data, AckRequest Request)
             {
 
             }
         });
 
-        Server.addEventListener (SocketIOEvents.CREATE_ROOM.GetEventName (), Data.class, new DataListener<Data> () {
+        Server.addEventListener (SocketIOEvents.JOIN_ROOM.GetEventName (), JoinRemoveRoomData.class, new DataListener<JoinRemoveRoomData> () {
             @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
+            public void onData (SocketIOClient Client, JoinRemoveRoomData Data, AckRequest Request)
             {
 
             }
         });
 
-        Server.addEventListener (SocketIOEvents.JOIN_ROOM.GetEventName (), Data.class, new DataListener<Data> () {
+        Server.addEventListener (SocketIOEvents.REMOVE_ROOM.GetEventName (), JoinRemoveRoomData.class, new DataListener<JoinRemoveRoomData> () {
             @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
+            public void onData (SocketIOClient Client, JoinRemoveRoomData Data, AckRequest Request)
             {
 
             }
         });
 
-        Server.addEventListener (SocketIOEvents.REMOVE_ROOM.GetEventName (), Data.class, new DataListener<Data> () {
+        Server.addEventListener (SocketIOEvents.SEND_MESSAGE.GetEventName (), SendMessageData.class, new DataListener<SendMessageData> () {
             @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
+            public void onData (SocketIOClient Client, SendMessageData Data, AckRequest Request)
             {
 
             }
         });
 
-        Server.addEventListener (SocketIOEvents.SEND_MESSAGE.GetEventName (), Data.class, new DataListener<Data> () {
+        Server.addEventListener (SocketIOEvents.REMOVE_MESSAGE.GetEventName (), RemoveMessageData.class, new DataListener<RemoveMessageData> () {
             @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
+            public void onData (SocketIOClient Client, RemoveMessageData Data, AckRequest Request)
             {
 
             }
         });
 
-        Server.addEventListener (SocketIOEvents.REMOVE_MESSAGE.GetEventName (), Data.class, new DataListener<Data> () {
+        Server.addEventListener (SocketIOEvents.KICK_USER.GetEventName (), KickUserData.class, new DataListener<KickUserData> () {
             @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
-            {
-
-            }
-        });
-
-        Server.addEventListener (SocketIOEvents.KICK_USER.GetEventName (), Data.class, new DataListener<Data> () {
-            @Override
-            public void onData (SocketIOClient Client, Data Data, AckRequest Request)
+            public void onData (SocketIOClient Client, KickUserData Data, AckRequest Request)
             {
 
             }
