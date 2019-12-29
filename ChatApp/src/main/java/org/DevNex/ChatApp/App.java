@@ -1,6 +1,6 @@
 package org.DevNex.ChatApp;
 
-        import org.DevNex.ChatApp.Server.Server;
+import org.DevNex.ChatApp.Server.Server;
 
 public class App
 {
