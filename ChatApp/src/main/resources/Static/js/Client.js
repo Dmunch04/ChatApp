@@ -20,12 +20,24 @@ class Login extends React.Component {
 }
 
 
+class Home extends React.Component {
+  render() {
+    return <h1>
+      Home
+    </h1>
+  }
+}
+
+
 class App extends React.Component {
   render() {
     return <Router>
       <Switch>
-        <Route path="/login">
+        <Route exact path="/login">
           <Login/>
+        </Route>
+        <Route exact path="/h">
+          <Home/>
         </Route>
       </Switch>
     </Router>

@@ -4,9 +4,9 @@
   "description": "The frontend of a chat app",
   "main": "js/Client.js",
   "scripts": {
-    "build": "webpack ./js/Client.js --progress --mode=production",
-    "start": "webpack-dev-server ./js/Client.js --open mode=development",
-    "watch": "webpack ./js/Client.js --progress --watch"
+    "build": "webpack --progress --open --mode=production",
+    "start": "webpack-dev-server --open mode=development",
+    "watch": "webpack  --progress --open --watch"
   },
   "author": "",
   "license": "MIT",
@@ -24,6 +24,7 @@
   "dependencies": {
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-router-dom": "^5.1.2"
+    "react-router-dom": "^5.1.2",
+    "socket.io": "^2.3.0"
   }
 }
