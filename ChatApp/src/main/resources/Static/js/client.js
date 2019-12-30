@@ -14,7 +14,7 @@ import { LoginField } from "./login"
 
 
 // Client.js is purely for communication... :)
-import io from "socket.io";
+import io from "socket.io-client";
 
 
 class Login extends React.Component {

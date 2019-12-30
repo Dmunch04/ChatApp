@@ -1,5 +1,6 @@
 package org.DevNex.ChatApp.Objects.Data;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class JoinRemoveRoomData
@@ -9,6 +10,11 @@ public class JoinRemoveRoomData
 
     private UUID UserID;
     private UUID RoomID;
+
+    public JoinRemoveRoomData (Map<String, String> Args)
+    {
+        this (Args.get ("Token"), Args.get ("UserID"), Args.get ("RoomID"));
+    }
 
     public JoinRemoveRoomData (String Token, String UserID, String RoomID)
     {

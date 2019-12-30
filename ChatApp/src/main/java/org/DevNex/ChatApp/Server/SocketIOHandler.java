@@ -6,11 +6,21 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+
 import org.DevNex.ChatApp.Objects.Data.*;
 import org.DevNex.ChatApp.Sessions.ActionType;
 import org.DevNex.ChatApp.Sessions.Session;
 import org.DevNex.ChatApp.Sessions.SessionTracker;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+
+/*
+    SocketIOHandler:
+    This class handles all the traffic of the Socket.io server. It receives requests from a client, processes
+    the data and sends response back
+*/
 public class SocketIOHandler
 {
 
@@ -31,7 +41,6 @@ public class SocketIOHandler
         Send event + data to client:
         Client.sendEvent ("event", DataClass);
     */
-
     private void Listen ()
     {
         Server.addConnectListener (new ConnectListener () {
@@ -56,86 +65,106 @@ public class SocketIOHandler
             }
         });
 
-        Server.addEventListener (SocketIOEvents.LOGIN.GetEventName (), LoginRegisterData.class, new DataListener<LoginRegisterData> () {
+        Server.addEventListener (SocketIOEvents.LOGIN.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, LoginRegisterData Data, AckRequest Request)
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
+                LoginRegisterData Data = (LoginRegisterData) CreateClass (LoginRegisterData.class, Args);
+
                 // TODO: Login
 
                 // TODO: Replace the `""` with the users ID, obtained by getting from DB using the Token
-                //Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
-
-                // TODO: Fix that every variable is always null in the data
-                System.out.println ("Token: " + Data.GetToken ());
-            }
-        });
-
-        Server.addEventListener (SocketIOEvents.REGISTER.GetEventName (), LoginRegisterData.class, new DataListener<LoginRegisterData> () {
-            @Override
-            public void onData (SocketIOClient Client, LoginRegisterData Data, AckRequest Request)
-            {
-                // TODO: Register
-
-                // TODO: Replace the `""` with the users ID, obtained by getting from DB using the Token
+                // TODO: Fix `Invalid UUID string` error
                 Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
             }
         });
 
-        Server.addEventListener (SocketIOEvents.REMOVE_USER.GetEventName (), RemoveUserData.class, new DataListener<RemoveUserData> () {
+        Server.addEventListener (SocketIOEvents.REGISTER.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, RemoveUserData Data, AckRequest Request)
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
+                LoginRegisterData Data = (LoginRegisterData) CreateClass (LoginRegisterData.class, Args);
 
+                // TODO: Register
+
+                // TODO: Replace the `""` with the users ID, obtained by getting from DB using the Token
+                // TODO: Fix `Invalid UUID string` error
+                Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
             }
         });
 
-        Server.addEventListener (SocketIOEvents.CREATE_ROOM.GetEventName (), CreateRoomData.class, new DataListener<CreateRoomData> () {
+        Server.addEventListener (SocketIOEvents.REMOVE_USER.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, CreateRoomData Data, AckRequest Request)
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
-
+                RemoveUserData Data = (RemoveUserData) CreateClass (RemoveUserData.class, Args);
             }
         });
 
-        Server.addEventListener (SocketIOEvents.JOIN_ROOM.GetEventName (), JoinRemoveRoomData.class, new DataListener<JoinRemoveRoomData> () {
+        Server.addEventListener (SocketIOEvents.CREATE_ROOM.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, JoinRemoveRoomData Data, AckRequest Request)
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
-
+                CreateRoomData Data = (CreateRoomData) CreateClass (CreateRoomData.class, Args);
             }
         });
 
-        Server.addEventListener (SocketIOEvents.REMOVE_ROOM.GetEventName (), JoinRemoveRoomData.class, new DataListener<JoinRemoveRoomData> () {
+        Server.addEventListener (SocketIOEvents.JOIN_ROOM.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, JoinRemoveRoomData Data, AckRequest Request)
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
-
+                JoinRemoveRoomData Data = (JoinRemoveRoomData) CreateClass (JoinRemoveRoomData.class, Args);
             }
         });
 
-        Server.addEventListener (SocketIOEvents.SEND_MESSAGE.GetEventName (), SendMessageData.class, new DataListener<SendMessageData> () {
+        Server.addEventListener (SocketIOEvents.REMOVE_ROOM.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, SendMessageData Data, AckRequest Request)
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
-
+                JoinRemoveRoomData Data = (JoinRemoveRoomData) CreateClass (JoinRemoveRoomData.class, Args);
             }
         });
 
-        Server.addEventListener (SocketIOEvents.REMOVE_MESSAGE.GetEventName (), RemoveMessageData.class, new DataListener<RemoveMessageData> () {
+        Server.addEventListener (SocketIOEvents.SEND_MESSAGE.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, RemoveMessageData Data, AckRequest Request)
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
-
+                SendMessageData Data = (SendMessageData) CreateClass (SendMessageData.class, Args);
             }
         });
 
-        Server.addEventListener (SocketIOEvents.KICK_USER.GetEventName (), KickUserData.class, new DataListener<KickUserData> () {
+        Server.addEventListener (SocketIOEvents.REMOVE_MESSAGE.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, KickUserData Data, AckRequest Request)
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
-
+                RemoveMessageData Data = (RemoveMessageData) CreateClass (RemoveMessageData.class, Args);
             }
         });
+
+        Server.addEventListener (SocketIOEvents.KICK_USER.GetEventName (), Map.class, new DataListener<Map> () {
+            @Override
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
+            {
+                KickUserData Data = (KickUserData) CreateClass (KickUserData.class, Args);
+            }
+        });
+    }
+
+    public Object CreateClass (Class<?> Target, Map<String, String> Args)
+    {
+        try
+        {
+            Constructor<?> TargetConstructor =  Target.getConstructor (Map.class);
+            Object ClassObject = TargetConstructor.newInstance (Args);
+            return ClassObject;
+        }
+
+        catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException Error)
+        {
+            Error.printStackTrace ();
+        }
+
+        return null;
     }
 
 }
