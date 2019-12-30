@@ -1,8 +1,10 @@
 package org.DevNex.ChatApp.Server;
 
 import com.corundumstudio.socketio.*;
+import com.corundumstudio.socketio.protocol.JacksonJsonSupport;
 import express.Express;
 import express.middleware.Middleware;
+import org.DevNex.ChatApp.Objects.Data.LoginRegisterData;
 import org.DevNex.ChatApp.Sessions.SessionTracker;
 
 import java.io.IOException;
@@ -32,6 +34,10 @@ public class Server
         Configuration Config = new Configuration ();
         Config.setHostname (Host);
         Config.setPort (Integer.parseInt (SocketPort));
+
+        // Server JSON Config
+        Config.setJsonSupport (new JacksonJsonSupport ());
+        Config.getJsonSupport ().addEventMapping ("", SocketIOEvents.LOGIN.GetEventName (), LoginRegisterData.class);
 
         // Server Socket Config
         SocketConfig SocketConfig = Config.getSocketConfig ();

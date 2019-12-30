@@ -13,6 +13,10 @@ import "../css/Style.css"
 import { LoginField } from "./login"
 
 
+// Client.js is purely for communication... :)
+import io from "socket.io";
+
+
 class Login extends React.Component {
   /*
     Home: home page of the website; should have a why to use

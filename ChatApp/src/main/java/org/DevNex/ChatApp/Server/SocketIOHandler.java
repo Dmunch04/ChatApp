@@ -51,6 +51,8 @@ public class SocketIOHandler
                     Tracker.GetSession (Client.getSessionId ()).AddAction (ActionType.LOGOUT);
                     Tracker.RemoveSessionBySessionID (Client.getSessionId ());
                 }
+
+                System.out.println ("Client disconnected: " + Client.getSessionId ().toString ());
             }
         });
 
@@ -61,10 +63,10 @@ public class SocketIOHandler
                 // TODO: Login
 
                 // TODO: Replace the `""` with the users ID, obtained by getting from DB using the Token
-                Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
+                //Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
 
                 // TODO: Fix that every variable is always null in the data
-                System.out.println (Data.GetToken ());
+                System.out.println ("Token: " + Data.GetToken ());
             }
         });
 
