@@ -2,7 +2,7 @@
 
 // Imports
 import React from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,7 +11,9 @@ import {
 } from "react-router-dom";
 import "../css/Style.css"
 import { LoginField } from "./login"
+import io from 'socket.io-client';
 
+window.sock = io('http://localhost:7089');
 
 class Login extends React.Component {
   /*
@@ -85,4 +87,4 @@ class App extends React.Component {
 const e = React.createElement;
 
 const domContainer = document.querySelector('#root');
-ReactDOM.render(e(App), domContainer);
+render(e(App), domContainer);
