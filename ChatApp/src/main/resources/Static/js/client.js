@@ -15,6 +15,10 @@ import io from 'socket.io-client';
 
 window.sock = io('http://localhost:7089');
 
+// Client.js is purely for communication... :)
+import io from "socket.io-client";
+
+
 class Login extends React.Component {
   /*
     Home: home page of the website; should have a why to use

@@ -1,5 +1,6 @@
 package org.DevNex.ChatApp.Objects.Data;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class CreateRoomData
@@ -9,6 +10,11 @@ public class CreateRoomData
 
     private String Display;
     private UUID UserID;
+
+    public CreateRoomData (Map<String, String> Args)
+    {
+        this (Args.get ("Token"), Args.get ("Display"), Args.get ("UserID"));
+    }
 
     public CreateRoomData (String Token, String Display, String UserID)
     {

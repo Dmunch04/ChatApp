@@ -1,5 +1,6 @@
 package org.DevNex.ChatApp.Objects.Data;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class RemoveMessageData
@@ -10,6 +11,11 @@ public class RemoveMessageData
     private UUID UserID;
     private UUID RoomID;
     private UUID MessageID;
+
+    public RemoveMessageData (Map<String, String> Args)
+    {
+        this (Args.get ("Token"), Args.get ("UserID"), Args.get ("RoomID"), Args.get ("MessageID"));
+    }
 
     public RemoveMessageData (String Token, String UserID, String RoomID, String MessageID)
     {

@@ -3,6 +3,7 @@ package org.DevNex.ChatApp.Objects.Data;
 import org.DevNex.ChatApp.Utils.Helper;
 
 import java.sql.Timestamp;
+import java.util.Map;
 
 public class LoginRegisterData
 {
@@ -13,7 +14,10 @@ public class LoginRegisterData
     private String Password;
     private Timestamp Timestamp;
 
-    public LoginRegisterData () { }
+    public LoginRegisterData (Map<String, String> Args)
+    {
+        this (Args.get ("Token"), Args.get ("Username"), Args.get ("Passwords"));
+    }
 
     public LoginRegisterData (String Token, String Username, String Password)
     {
