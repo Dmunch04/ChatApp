@@ -2,11 +2,11 @@
   "name": "chatapp",
   "version": "1.0.0",
   "description": "The frontend of a chat app",
-  "main": "js/Client.js",
+  "main": "js/client.js",
   "scripts": {
-    "build": "webpack ./js/Client.js --progress --open --mode=production",
-    "start": "webpack-dev-server ./js/Client.js --open mode=development",
-    "watch": "webpack ./js/Client.js --progress --open --watch"
+    "build": "webpack js/client.js --progress --open --mode=production",
+    "start": "webpack-dev-server js/client.js --open mode=development",
+    "watch": "webpack js/client.js --progress --open --watch"
   },
   "author": "",
   "license": "MIT",
@@ -20,12 +20,16 @@
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
+    "webpack-dev-server": "^3.10.1",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bufferutil": "^4.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "utf-8-validate": "^5.0.2"
   }
 }

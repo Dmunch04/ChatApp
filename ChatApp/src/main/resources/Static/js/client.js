@@ -10,9 +10,8 @@ import {
   Link
 } from "react-router-dom";
 import "../css/Style.css"
-import { LoginField } from "./Login"
+import { LoginField } from "./login"
 
-// let Socket = io ();
 
 class Login extends React.Component {
   /*
@@ -39,7 +38,7 @@ class Home extends React.Component {
   */
   render() {
     return <h1>
-      Home
+      Welcome to chat app!
     </h1>
   }
 }
@@ -52,6 +51,16 @@ class App extends React.Component {
   */
   render() {
     return <Router>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/home">Home</Link>
+          </li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </ul>
+      </nav>
       <Switch>
         <Route exact path="/login">
           <Login/>
@@ -59,7 +68,9 @@ class App extends React.Component {
         <Route exact path="/home">
           <Home/>
         </Route>
-        {/* TODO: make the `/` path  map to /home */}
+        <Route exact path="/">
+          <Home/>
+        </Route>
       </Switch>
     </Router>
   }

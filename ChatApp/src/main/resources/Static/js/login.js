@@ -1,6 +1,7 @@
 'use strict';
 import React from "react";
-
+import { hash } from "./hash";
+import io from 'socket.io-client';
 
 export class LoginField extends React.Component {
   /*
@@ -25,12 +26,12 @@ export class LoginField extends React.Component {
   }
 
   handleChangePassword(event) {
-    this.setState({password: hash(event.target.value)});
+    this.setState({password: event.target.value});
   }
 
   handleSubmit(event) {
     // TODO: send info to backend
-    alert(`Username: ${this.state.username}\nPassword: ${this.state.password}`);
+    alert(`Username: ${this.state.username}\nPassword: ${hash(this.state.password)}`);
     event.preventDefault();
   }
 
@@ -51,7 +52,3 @@ export class LoginField extends React.Component {
   }
 }
 
-function hash(password) {
-  // TODO: add hash function and salt
-  return password
-}
