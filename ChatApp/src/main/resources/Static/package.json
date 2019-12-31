@@ -4,9 +4,9 @@
   "description": "The frontend of a chat app",
   "main": "js/client.js",
   "scripts": {
-    "build": "webpack js/client.js --progress --open --mode=production",
-    "start": "webpack-dev-server js/client.js --open mode=development",
-    "watch": "webpack js/client.js --progress --open --watch"
+    "build": "webpack js/render.js --progress --open --mode=production",
+    "start": "webpack-dev-server js/render.js --open mode=development",
+    "watch": "webpack js/render.js --progress --open --watch"
   },
   "author": "",
   "license": "MIT",

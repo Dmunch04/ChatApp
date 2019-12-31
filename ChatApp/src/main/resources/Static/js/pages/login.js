@@ -1,6 +1,22 @@
 'use strict';
 import React from "react";
-import { hash } from "./hash";
+import { hash } from "./helpers/hash";
+import { login } from "../client";
+
+export class Login extends React.Component {
+  /*
+    Login: super page of the login page; contains the `Login-
+    Field` component.
+  */
+  render() {
+    return <div>
+      <h1>
+        Login
+      </h1>
+      <LoginField/>
+    </div>
+  }
+}
 
 
 export class LoginField extends React.Component {
@@ -31,7 +47,8 @@ export class LoginField extends React.Component {
 
   handleSubmit(event) {
     // TODO: send info to backend
-    console.log(`Username: ${this.state.username}\nPassword: ${hash(this.state.password)}`);
+    console.log(`Username: ${this.state.username}\nPassword: ${this.state.password}`);
+    let user = login(this.state.username, this.state.password);
     event.preventDefault();
   }
 

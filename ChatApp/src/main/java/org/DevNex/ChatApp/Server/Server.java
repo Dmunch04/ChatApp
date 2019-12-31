@@ -56,14 +56,15 @@ public class Server
         this.App = new Express ();
         this.SocketIO = new SocketIOServer (Config);
 
-        //try { App.use (Middleware.statics (this.getClass ().getResource ("/Static/dist/").getPath ())); }
-        try { App.use (Middleware.statics (this.getClass ().getResource ("/TestClient/").getPath ())); }
+        try { App.use (Middleware.statics (this.getClass ().getResource ("/Static/dist/").getPath ())); }
         catch (IOException Error) { Error.printStackTrace (); }
 
         App.bind (new ServerBindings());
         App.listen (Integer.parseInt (Port));
 
         new SocketIOHandler (this, SocketIO);
+
+        //this.SocketIO.startAsync();
 
         SocketIO.start ();
 

@@ -1,94 +1,31 @@
-'use strict';
+"use strict";
 
-// Imports
-import React from "react";
-import { render } from "react-dom";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import "../css/Style.css"
-import { LoginField } from "./login"
-import io from 'socket.io-client';
-
-window.sock = io('http://localhost:7089');
-
-// Client.js is purely for communication... :)
 import io from "socket.io-client";
+import { hash } from "./pages/helpers/hash";
 
-
-class Login extends React.Component {
-  /*
-    Home: home page of the website; should have a why to use
-    Login: super page of the login page; contains the `Login-
-    Field` component.
-  */
-  render() {
-    return <div>
-      <h1>
-        Login
-      </h1>
-      <LoginField/>
-    </div>
-  }
-}
-
-
-class Home extends React.Component {
-  /*
-    Home: home page of the website; should have a why to use
-    this app, as well as a login link and a "register now" b-
-    utton.
-  */
-  render() {
-    return <h1>
-      Welcome to chat app!
-    </h1>
-  }
-}
-
-
-class App extends React.Component {
-  /*
-    App: full app responsible for routing and rendering the
-    website. It also acts as the home page when needed.
-  */
-  render() {
-    return <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/home">Home</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-        </ul>
-      </nav>
-      <Switch>
-        <Route exact path="/login">
-          <Login/>
-        </Route>
-        <Route exact path="/home">
-          <Home/>
-        </Route>
-        <Route exact path="/">
-          <Home/>
-        </Route>
-      </Switch>
-    </Router>
-  }
-}
-
-/*---------------------------------------------------------------*/
+let sock = io("http://localhost:7089");
 
 /*
-  Render the site on the clients "root" div
+  client.js: a file with alot of bits and pieces for diffe-
+  rent tasks requiring access to the backend.
 */
 
-const e = React.createElement;
+export function login(username, password) {
+  /*
+    login: a function responsible for getting from backend,
+    hashing it with that salt, then sending back to backend
+    to check if equal, then receives the user object with a
+    token. The actual structure is something like this:
+    Client -> (Username) -> Server -> (Passwords's salt) ->
+    Client -> (Password) -> Server -> (User Object / Error
+    Object) -> Client
+  */
 
-const domContainer = document.querySelector('#root');
-render(e(App), domContainer);
+  sock.emit("login-get-user-salt", username);
+  sock.on("login-send-user-salt", (data) => {
+    sock.emit("get-login", {Username: username, Password: hash(password, {salt: data.salt})});
+    sock.on("login-send", (data) => {
+      return data;
+    });
+  });
+}
