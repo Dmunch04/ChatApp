@@ -7,14 +7,17 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 
+import org.DevNex.ChatApp.Database.DatabaseHelper;
 import org.DevNex.ChatApp.Objects.Data.*;
+import org.DevNex.ChatApp.Objects.User;
 import org.DevNex.ChatApp.Sessions.ActionType;
 import org.DevNex.ChatApp.Sessions.Session;
 import org.DevNex.ChatApp.Sessions.SessionTracker;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+
+import org.DevNex.ChatApp.Utils.Helper;
+import static org.DevNex.ChatApp.Utils.Helper.CreateClass;
 
 /*
     SocketIOHandler:
@@ -27,12 +30,14 @@ public class SocketIOHandler
     private Server Instance;
     private SocketIOServer Server;
     private SessionTracker Tracker;
+    private DatabaseHelper DBHelper;
 
     public SocketIOHandler (Server Instance, SocketIOServer Server)
     {
         this.Instance = Instance;
         this.Server = Server;
         this.Tracker = Instance.GetSessionTracker ();
+        this.DBHelper = Instance.GetDatabaseHelper ();
 
         Listen ();
     }
@@ -73,9 +78,12 @@ public class SocketIOHandler
 
                 // TODO: Login
 
-                // TODO: Replace the `""` with the users ID, obtained by getting from DB using the Token
                 // TODO: Fix `Invalid UUID string` error
-                Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
+                User Target = DBHelper.GetUser (Data.GetUsername ());
+                Tracker.AddSession (new Session (Target.GetToken (), Client.getSessionId (), Target.GetID ()));
+
+                // Send the User object back to the client
+                Client.sendEvent ("register", Target);
             }
         });
 
@@ -87,9 +95,23 @@ public class SocketIOHandler
 
                 // TODO: Register
 
-                // TODO: Replace the `""` with the users ID, obtained by getting from DB using the Token
                 // TODO: Fix `Invalid UUID string` error
-                Tracker.AddSession (new Session (Data.GetToken (), Client.getSessionId (), ""));
+                User Target = DBHelper.GetUser (Data.GetUsername ());
+                Tracker.AddSession (new Session (Target.GetToken (), Client.getSessionId (), Target.GetID ()));
+
+                // Send the User object back to the client
+                Client.sendEvent ("register", Target);
+            }
+        });
+
+        Server.addEventListener(SocketIOEvents.GET_PASSWORD_SALT.GetEventName (), String.class, new DataListener<String> () {
+            @Override
+            public void onData (SocketIOClient Client, String Data, AckRequest Request) throws Exception {
+                String Password = DBHelper.GetPassword (Data);
+
+                String Salt = Helper.GetSalt (Password);
+
+                Client.sendEvent (SocketIOEvents.GET_PASSWORD_SALT.GetEventName (), Salt);
             }
         });
 
@@ -148,23 +170,6 @@ public class SocketIOHandler
                 KickUserData Data = (KickUserData) CreateClass (KickUserData.class, Args);
             }
         });
-    }
-
-    public Object CreateClass (Class<?> Target, Map<String, String> Args)
-    {
-        try
-        {
-            Constructor<?> TargetConstructor =  Target.getConstructor (Map.class);
-            Object ClassObject = TargetConstructor.newInstance (Args);
-            return ClassObject;
-        }
-
-        catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException Error)
-        {
-            Error.printStackTrace ();
-        }
-
-        return null;
     }
 
 }

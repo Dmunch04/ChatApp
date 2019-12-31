@@ -13,7 +13,11 @@ public enum SocketIOEvents
 
     SEND_MESSAGE ("send-message"),
     REMOVE_MESSAGE ("remove-message"),
-    KICK_USER ("kick-user");
+    KICK_USER ("kick-user"),
+
+    GET_ROOM ("get-room"),
+    GET_USER ("get-user"),
+    GET_PASSWORD_SALT ("get-salt");
 
     private String EventName;
 

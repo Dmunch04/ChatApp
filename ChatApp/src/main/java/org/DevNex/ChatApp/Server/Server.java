@@ -4,6 +4,8 @@ import com.corundumstudio.socketio.*;
 import com.corundumstudio.socketio.protocol.JacksonJsonSupport;
 import express.Express;
 import express.middleware.Middleware;
+import org.DevNex.ChatApp.Database.DatabaseHandler;
+import org.DevNex.ChatApp.Database.DatabaseHelper;
 import org.DevNex.ChatApp.Objects.Data.LoginRegisterData;
 import org.DevNex.ChatApp.Sessions.SessionTracker;
 
@@ -21,18 +23,22 @@ public class Server
     private SocketIOServer SocketIO;
 
     private SessionTracker Tracker;
+    private DatabaseHandler Database;
+    private DatabaseHelper Helper;
 
     private String Host;
     private String Port;
     private String SocketPort;
 
-    public Server (String Host, String Port, String SocketPort)
+    public Server (String Host, String Port, String SocketPort, DatabaseHandler Database)
     {
         this.Host = Host;
         this.Port = Port;
         this.SocketPort = SocketPort;
 
         this.Tracker = new SessionTracker ();
+        this.Database = Database;
+        this.Helper = new DatabaseHelper (Database);
 
         // Server Config
         Configuration Config = new Configuration ();
@@ -57,6 +63,7 @@ public class Server
         this.SocketIO = new SocketIOServer (Config);
 
         try { App.use (Middleware.statics (this.getClass ().getResource ("/Static/dist/").getPath ())); }
+        //try { App.use (Middleware.statics (this.getClass ().getResource ("/TestClient/").getPath ())); }
         catch (IOException Error) { Error.printStackTrace (); }
 
         App.bind (new ServerBindings());
@@ -64,8 +71,7 @@ public class Server
 
         new SocketIOHandler (this, SocketIO);
 
-        //this.SocketIO.startAsync();
-
+        //SocketIO.startAsync ();
         SocketIO.start ();
 
         System.out.println ("Server running on: " + Host + ":" + Port + "!");
@@ -79,6 +85,16 @@ public class Server
     public SessionTracker GetSessionTracker ()
     {
         return Tracker;
+    }
+
+    public DatabaseHandler GetDatabaseHandler ()
+    {
+        return Database;
+    }
+
+    public DatabaseHelper GetDatabaseHelper ()
+    {
+        return Helper;
     }
 
 }

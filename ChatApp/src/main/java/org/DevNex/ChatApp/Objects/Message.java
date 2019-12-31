@@ -8,12 +8,14 @@ public class Message
     private UUID ID;
     private UUID RoomID;
     private UUID SenderID;
+    private String Content;
 
-    public Message (UUID ID, UUID RoomID, UUID SenderID)
+    public Message (UUID ID, UUID RoomID, UUID SenderID, String Content)
     {
         this.ID = ID;
         this.RoomID = RoomID;
         this.SenderID = SenderID;
+        this.Content = Content;
     }
 
     public UUID GetID ()
@@ -29,6 +31,11 @@ public class Message
     public UUID SenderID ()
     {
         return SenderID;
+    }
+
+    public String GetContent ()
+    {
+        return Content;
     }
 
 }

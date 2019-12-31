@@ -1,7 +1,10 @@
 package org.DevNex.ChatApp.Utils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 public class Helper
@@ -10,6 +13,11 @@ public class Helper
     public static Timestamp GetTimestamp ()
     {
         return new Timestamp (new Date ().getTime ());
+    }
+
+    public static String GetSalt (String Hash)
+    {
+        return Hash.split ("\\$")[3].substring (0, 22);
     }
 
     public static UUID MakeUUID (String UUIDString) {
@@ -29,6 +37,22 @@ public class Helper
         long MSB = (M1 << 32) | (M2 << 16) | M3;
         long LSB = (LSB1 << 48) | LSB2;
         return new UUID (MSB, LSB);
+    }
+
+    public static Object CreateClass (Class<?> Target, Map<String, String> Args)
+    {
+        try
+        {
+            Constructor<?> TargetConstructor =  Target.getConstructor (Map.class);
+            return TargetConstructor.newInstance (Args);
+        }
+
+        catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException Error)
+        {
+            Error.printStackTrace ();
+        }
+
+        return null;
     }
 
 }

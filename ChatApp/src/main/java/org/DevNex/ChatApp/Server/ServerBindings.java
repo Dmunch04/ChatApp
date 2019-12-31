@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 public class ServerBindings
 {
 
-    @DynExpress (context = "*")  // catch all rule
+    @DynExpress (context = "*")
     public void GetIndex (Request Request, Response Response)
     {
         Response.send (Paths.get (this.getClass ().getResource ("/Static/dist/index.html").getPath ()));
