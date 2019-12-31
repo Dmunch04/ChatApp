@@ -1,6 +1,6 @@
 'use strict';
 import React from "react";
-import { hash } from "./helpers/hash";
+import { register } from "../client";
 
 
 export class Register extends React.Component {
@@ -55,7 +55,7 @@ class RegisterField extends React.Component {
   handleSubmit(event) {
     // TODO: send info to backend and check if username already exists
     if (this.state.password1 === this.state.password2) {
-      console.log(`Username: ${this.state.username}\nPassword: ${hash(this.state.password1)}`);
+      let user = register(this.state.username, this.state.password1);
     } else {
       this.setState({error: "Passwords do not match!"});
     }

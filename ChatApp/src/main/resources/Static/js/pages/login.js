@@ -1,6 +1,5 @@
 'use strict';
 import React from "react";
-import { hash } from "./helpers/hash";
 import { login } from "../client";
 
 export class Login extends React.Component {
