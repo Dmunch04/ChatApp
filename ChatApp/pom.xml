@@ -71,6 +71,14 @@
             <version>1.7.7</version>
         </dependency>
         <!-- - -->
+
+        <!-- YAML -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.21</version>
+        </dependency>
+        <!-- - -->
     </dependencies>
 
 </project>

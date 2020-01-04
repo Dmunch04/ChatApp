@@ -16,7 +16,9 @@ public enum SocketIOEvents
     KICK_USER ("kick-user"),
 
     GET_ROOM ("get-room"),
+    GET_ROOM_NAME ("get-room-name"),
     GET_USER ("get-user"),
+    GET_USER_NAME ("get-user-name"),
     GET_PASSWORD_SALT ("get-salt");
 
     private String EventName;

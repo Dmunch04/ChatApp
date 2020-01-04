@@ -10,6 +10,8 @@ import java.util.UUID;
 public class Helper
 {
 
+    private static final String Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?-#$@";
+
     public static Timestamp GetTimestamp ()
     {
         return new Timestamp (new Date ().getTime ());
@@ -53,6 +55,18 @@ public class Helper
         }
 
         return null;
+    }
+
+    public static String GenerateToken (int Size)
+    {
+        StringBuilder Token = new StringBuilder ();
+
+        while (Size-- != 0) {
+            int Character = (int) (Math.random () * Characters.length ());
+            Token.append (Characters.charAt (Character));
+        }
+
+        return Token.toString();
     }
 
 }

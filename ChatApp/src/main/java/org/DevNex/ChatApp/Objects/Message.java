@@ -1,5 +1,7 @@
 package org.DevNex.ChatApp.Objects;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Message
@@ -18,6 +20,17 @@ public class Message
         this.Content = Content;
     }
 
+    public Map<String, String> ToMap ()
+    {
+        Map<String, String> Objects = new HashMap<String, String> ();
+        Objects.put ("ID", ID.toString ());
+        Objects.put ("SenderID", SenderID.toString ());
+        Objects.put ("RoomID", RoomID.toString ());
+        Objects.put ("Content", Content);
+
+        return Objects;
+    }
+
     public UUID GetID ()
     {
         return ID;
@@ -28,7 +41,7 @@ public class Message
         return RoomID;
     }
 
-    public UUID SenderID ()
+    public UUID GetSenderID ()
     {
         return SenderID;
     }

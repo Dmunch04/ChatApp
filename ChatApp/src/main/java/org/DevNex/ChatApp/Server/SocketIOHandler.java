@@ -8,13 +8,17 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 
 import org.DevNex.ChatApp.Database.DatabaseHelper;
+import org.DevNex.ChatApp.ErrorSystem.Error;
+import org.DevNex.ChatApp.ErrorSystem.ErrorType;
 import org.DevNex.ChatApp.Objects.Data.*;
 import org.DevNex.ChatApp.Objects.User;
 import org.DevNex.ChatApp.Sessions.ActionType;
 import org.DevNex.ChatApp.Sessions.Session;
 import org.DevNex.ChatApp.Sessions.SessionTracker;
 
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 import org.DevNex.ChatApp.Utils.Helper;
 import static org.DevNex.ChatApp.Utils.Helper.CreateClass;
@@ -83,7 +87,7 @@ public class SocketIOHandler
                 Tracker.AddSession (new Session (Target.GetToken (), Client.getSessionId (), Target.GetID ()));
 
                 // Send the User object back to the client
-                Client.sendEvent ("register", Target);
+                Client.sendEvent (SocketIOEvents.LOGIN.GetEventName (), Target);
             }
         });
 
@@ -93,14 +97,26 @@ public class SocketIOHandler
             {
                 LoginRegisterData Data = (LoginRegisterData) CreateClass (LoginRegisterData.class, Args);
 
-                // TODO: Register
+                User RegisterUser = new User (Helper.GenerateToken (28), UUID.randomUUID (), Data.GetUsername (), Data.GetPassword (), new ArrayList<UUID> ());
+                Object Result = DBHelper.AddUser (RegisterUser);
 
                 // TODO: Fix `Invalid UUID string` error
-                User Target = DBHelper.GetUser (Data.GetUsername ());
-                Tracker.AddSession (new Session (Target.GetToken (), Client.getSessionId (), Target.GetID ()));
+                if (Result instanceof User)
+                {
+                    User Target = (User) Result;
+                    Tracker.AddSession (new Session (Target.GetToken (), Client.getSessionId (), Target.GetID ()));
 
-                // Send the User object back to the client
-                Client.sendEvent ("register", Target);
+                    // Send the User object back to the client
+                    Client.sendEvent (SocketIOEvents.REGISTER.GetEventName (), Target.ToMap ());
+                }
+
+                else if (Result instanceof Error)
+                {
+                    Error Target = (Error) Result;
+
+                    // Send the User object back to the client
+                    Client.sendEvent (SocketIOEvents.REGISTER.GetEventName (), Target.ToMap ());
+                }
             }
         });
 
@@ -168,6 +184,69 @@ public class SocketIOHandler
             public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
                 KickUserData Data = (KickUserData) CreateClass (KickUserData.class, Args);
+            }
+        });
+
+        Server.addEventListener(SocketIOEvents.GET_ROOM.GetEventName (), String.class, new DataListener<String> () {
+            @Override
+            public void onData (SocketIOClient Client, String Data, AckRequest Request) throws Exception
+            {
+                if (DBHelper.RoomExists (UUID.fromString (Data)))
+                {
+                    Client.sendEvent (SocketIOEvents.GET_ROOM.GetEventName (), DBHelper.GetRoom (UUID.fromString (Data)).ToMap ());
+                }
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.GET_ROOM_NAME.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with the ID was not found: " + Data));
+                }
+            }
+        });
+
+        Server.addEventListener(SocketIOEvents.GET_ROOM_NAME.GetEventName (), String.class, new DataListener<String> () {
+            @Override
+            public void onData (SocketIOClient Client, String Data, AckRequest Request) throws Exception
+            {
+                if (DBHelper.RoomExists (UUID.fromString (Data)))
+                {
+                    Client.sendEvent (SocketIOEvents.GET_ROOM_NAME.GetEventName (), DBHelper.GetRoom (UUID.fromString (Data)).GetDisplay ());
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.GET_ROOM_NAME.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with the ID was not found: " + Data));
+                }
+            }
+        });
+
+        Server.addEventListener(SocketIOEvents.GET_USER.GetEventName (), String.class, new DataListener<String> () {
+            @Override
+            public void onData (SocketIOClient Client, String Data, AckRequest Request) throws Exception
+            {
+                if (DBHelper.UserExists (UUID.fromString (Data)))
+                {
+                    Client.sendEvent (SocketIOEvents.GET_USER.GetEventName (), DBHelper.GetUser (UUID.fromString (Data)).ToMap ());
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.GET_USER.GetEventName (), new Error (ErrorType.UserNotFound, "User with the ID was not found: " + Data));
+                }
+            }
+        });
+
+        Server.addEventListener(SocketIOEvents.GET_USER_NAME.GetEventName (), String.class, new DataListener<String> () {
+            @Override
+            public void onData (SocketIOClient Client, String Data, AckRequest Request) throws Exception
+            {
+                if (DBHelper.UserExists (UUID.fromString (Data)))
+                {
+                    Client.sendEvent (SocketIOEvents.GET_USER_NAME.GetEventName (), DBHelper.GetUser (UUID.fromString (Data)).GetUsername ());
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.GET_USER_NAME.GetEventName (), new Error (ErrorType.UserNotFound, "User with the ID was not found: " + Data));
+                }
             }
         });
     }

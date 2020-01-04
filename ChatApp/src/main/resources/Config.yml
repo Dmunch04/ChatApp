@@ -1,0 +1,11 @@
+Server:
+  Host: localhost
+  Port: 6969
+  SocketPort: 7089
+
+Database:
+  Host: example.com
+  Port: 2556
+  Name: Database
+  Username: admin
+  Password: pwd

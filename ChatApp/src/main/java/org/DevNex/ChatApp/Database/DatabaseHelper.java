@@ -1,5 +1,7 @@
 package org.DevNex.ChatApp.Database;
 
+import org.DevNex.ChatApp.ErrorSystem.Error;
+import org.DevNex.ChatApp.ErrorSystem.ErrorType;
 import org.DevNex.ChatApp.Objects.Message;
 import org.DevNex.ChatApp.Objects.Room;
 import org.DevNex.ChatApp.Objects.User;
@@ -91,12 +93,17 @@ public class DatabaseHelper
                 Statement.setString (1, ID.toString ());
 
                 ResultSet Results = Statement.executeQuery ();
+                Results.next ();
 
-                String[] ClientsArray = Results.getString ("Clients").split (",");
+                String ClientsList = Results.getString ("Clients");
                 List<UUID> Clients = new ArrayList<UUID> ();
-                for (String Client : ClientsArray)
+                if (!ClientsList.equals ("."))
                 {
-                    Clients.add (UUID.fromString (Client));
+                    String[] ClientsArray = ClientsList.split (",");
+                    for (String Client : ClientsArray)
+                    {
+                        Clients.add (UUID.fromString (Client));
+                    }
                 }
 
                 return new Room (ID, Results.getString ("Display"), UUID.fromString (Results.getString ("Creator")), Clients, GetRoomMessages (ID));
@@ -121,15 +128,20 @@ public class DatabaseHelper
                 Statement.setString (1, ID.toString ());
 
                 ResultSet Results = Statement.executeQuery ();
+                Results.next ();
 
-                String[] RoomsArray = Results.getString ("Rooms").split (",");
+                String RoomsList = Results.getString ("Rooms");
                 List<UUID> Rooms = new ArrayList<UUID> ();
-                for (String Room : RoomsArray)
+                if (!RoomsList.equals ("."))
                 {
-                    Rooms.add (UUID.fromString (Room));
+                    String[] RoomsArray = RoomsList.split (",");
+                    for (String Room : RoomsArray)
+                    {
+                        Rooms.add (UUID.fromString (Room));
+                    }
                 }
 
-                return new User (Results.getString ("Token"), ID, Results.getString ("Username"), Rooms);
+                return new User (Results.getString ("Token"), ID, Results.getString ("Username"), Results.getString ("Password"), Rooms);
             }
 
             catch (SQLException Error)
@@ -151,15 +163,20 @@ public class DatabaseHelper
                 Statement.setString (1, Username);
 
                 ResultSet Results = Statement.executeQuery ();
+                Results.next ();
 
-                String[] RoomsArray = Results.getString ("Rooms").split (",");
+                String RoomsList = Results.getString ("Rooms");
                 List<UUID> Rooms = new ArrayList<UUID> ();
-                for (String Room : RoomsArray)
+                if (!RoomsList.equals ("."))
                 {
-                    Rooms.add (UUID.fromString (Room));
+                    String[] RoomsArray = RoomsList.split (",");
+                    for (String Room : RoomsArray)
+                    {
+                        Rooms.add (UUID.fromString (Room));
+                    }
                 }
 
-                return new User (Results.getString ("Token"), UUID.fromString (Results.getString ("ID")), Username, Rooms);
+                return new User (Results.getString ("Token"), UUID.fromString (Results.getString ("ID")), Username, Results.getString ("Password"), Rooms);
             }
 
             catch (SQLException Error)
@@ -181,6 +198,7 @@ public class DatabaseHelper
                 Statement.setString (1, Username);
 
                 ResultSet Results = Statement.executeQuery ();
+                Results.next ();
 
                 return Results.getString ("Password");
             }
@@ -204,6 +222,7 @@ public class DatabaseHelper
                 Statement.setString (1, RoomID.toString ());
 
                 ResultSet Results = Statement.executeQuery ();
+                Results.next ();
 
                 Map<UUID, Message> Messages = new HashMap<UUID, Message> ();
                 Messages.put (
@@ -236,16 +255,168 @@ public class DatabaseHelper
         return null;
     }
 
-    // TODO: Make functions
-    public void AddRoom (Room Target) { }
+    public void AddRoom (Room Target)
+    {
+        if (!RoomExists (Target.GetID ()))
+        {
+            try
+            {
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + RoomsTable + " (ID,Creator,Clients) VALUE (?,?,?)");
+                Statement.setString (1, Target.GetID ().toString ());
+                Statement.setString (2, Target.GetCreator ().toString ());
+                Statement.setString (3, Target.GetClientsString ());
 
-    public void RemoveRoom (UUID RoomID) { }
+                Statement.executeUpdate ();
+            }
 
-    public void AddUser (User Target) { }
+            catch (SQLException Error)
+            {
+                Error.printStackTrace ();
+            }
+        }
+    }
 
-    public void RemoveUser (UUID UserID) { }
+    public void UpdateRoom (Room Target)
+    {
+        if (RoomExists (Target.GetID ()))
+        {
+            try
+            {
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + RoomsTable + " (ID,Creator,Clients) VALUE (?,?,?) WHERE ID=?");
+                Statement.setString (1, Target.GetID ().toString ());
+                Statement.setString (2, Target.GetCreator ().toString ());
+                Statement.setString (3, Target.GetClientsString ());
+                Statement.setString (4, Target.GetID ().toString ());
+                System.out.println (Target.GetClientsString ());
 
-    public void AddMessage (Message Target) { }
+                Statement.executeUpdate ();
+            }
+
+            catch (SQLException Error)
+            {
+                Error.printStackTrace ();
+            }
+        }
+    }
+
+    public boolean RemoveRoom (UUID RoomID)
+    {
+        if (RoomExists (RoomID))
+        {
+            try
+            {
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("DELETE FROM " + RoomsTable + " WHERE ID=?");
+                Statement.setString (1, RoomID.toString ());
+
+                return true;
+            }
+
+            catch (SQLException Error)
+            {
+                Error.printStackTrace ();
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    public Object AddUser (User Target)
+    {
+        if (!UserExists (Target.GetID ()) && !UserExists (Target.GetUsername ()))
+        {
+            try
+            {
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + UsersTable +" (Token,ID,Username,Password,Rooms) VALUE (?,?,?,?,?)");
+                Statement.setString (1, Target.GetToken ());
+                Statement.setString (2, Target.GetID ().toString ());
+                Statement.setString (3, Target.GetUsername ());
+                Statement.setString (4, Target.GetPassword ());
+                Statement.setString (5, Target.GetRoomsString ());
+
+                Statement.executeUpdate ();
+
+                return GetUser (Target.GetID ());
+            }
+
+            catch (SQLException Error)
+            {
+                Error.printStackTrace ();
+
+                return new Error (ErrorType.Unknown, "Unknown error occurred while creating account: " + Target.GetUsername ());
+            }
+        }
+
+        return new Error (ErrorType.UserAlreadyExists, "User with that username already exists: " + Target.GetUsername ());
+    }
+
+    public void UpdateUser (User Target)
+    {
+        if (UserExists (Target.GetID ()))
+        {
+            try
+            {
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable +" (Token,ID,Username,Password,Rooms) VALUE (?,?,?,?,?) WHERE ID=?");
+                Statement.setString (1, Target.GetToken ());
+                Statement.setString (2, Target.GetID ().toString ());
+                Statement.setString (3, Target.GetUsername ());
+                Statement.setString (4, Target.GetPassword ());
+                Statement.setString (5, Target.GetRoomsString ());
+                Statement.setString (6, Target.GetID ().toString ());
+
+                Statement.executeUpdate ();
+            }
+
+            catch (SQLException Error)
+            {
+                Error.printStackTrace ();
+            }
+        }
+    }
+
+    public boolean RemoveUser (UUID UserID)
+    {
+        if (UserExists (UserID))
+        {
+            try
+            {
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("DELETE FROM " + UsersTable + " WHERE ID=?");
+                Statement.setString (1, UserID.toString ());
+
+                return true;
+            }
+
+            catch (SQLException Error)
+            {
+                Error.printStackTrace ();
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    public void AddMessage (Message Target)
+    {
+        if (!UserExists (Target.GetID ()))
+        {
+            try
+            {
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + MessagesTable +" (ID,Room,Sender,Content) VALUE (?,?,?,?))");
+                Statement.setString (1, Target.GetID ().toString ());
+                Statement.setString (2, Target.GetRoomID ().toString ());
+                Statement.setString (3, Target.GetSenderID ().toString ());
+                Statement.setString (4, Target.GetContent ());
+
+                Statement.executeUpdate ();
+            }
+
+            catch (SQLException Error)
+            {
+                Error.printStackTrace ();
+            }
+        }
+    }
 
     public void RemoveMessage (UUID RoomID, UUID MessageID) { }
 

@@ -14,7 +14,7 @@ public class LoginRegisterData
 
     public LoginRegisterData (Map<String, String> Args)
     {
-        this (Args.get ("Username"), Args.get ("Passwords"));
+        this (Args.get ("Username"), Args.get ("Password"));
     }
 
     public LoginRegisterData (String Username, String Password)

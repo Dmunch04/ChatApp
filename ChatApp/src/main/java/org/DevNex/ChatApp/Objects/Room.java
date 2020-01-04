@@ -1,5 +1,6 @@
 package org.DevNex.ChatApp.Objects;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,6 +21,18 @@ public class Room
         this.Creator = Creator;
         this.Clients = Clients;
         this.Messages = Messages;
+    }
+
+    public Map<String, Object> ToMap ()
+    {
+        Map<String, Object> Objects = new HashMap<String, Object> ();
+        Objects.put ("ID", ID.toString ());
+        Objects.put ("Display", Display);
+        Objects.put ("Creator", Creator.toString ());
+        Objects.put ("Clients", GetClientsString ());
+        Objects.put ("Messages", Messages.values ());
+
+        return Objects;
     }
 
     public UUID GetID ()
@@ -56,6 +69,20 @@ public class Room
         {
             Clients.remove (ID);
         }
+    }
+
+    public String GetClientsString ()
+    {
+        if (Clients.isEmpty ()) return ".";
+
+        StringBuilder ClientsString = new StringBuilder ();
+
+        for (UUID Client : Clients)
+        {
+            ClientsString.append (Client.toString ()).append (",");
+        }
+
+        return ClientsString.substring (0, Clients.size () - 1);
     }
 
     public Map<UUID, Message> GetMessages ()
