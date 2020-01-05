@@ -7,19 +7,24 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 
+import org.DevNex.ChatApp.App;
 import org.DevNex.ChatApp.Database.DatabaseHelper;
 import org.DevNex.ChatApp.ErrorSystem.Error;
 import org.DevNex.ChatApp.ErrorSystem.ErrorType;
 import org.DevNex.ChatApp.Objects.Data.*;
+import org.DevNex.ChatApp.Objects.Message;
+import org.DevNex.ChatApp.Objects.Room;
 import org.DevNex.ChatApp.Objects.User;
 import org.DevNex.ChatApp.Sessions.ActionType;
 import org.DevNex.ChatApp.Sessions.Session;
 import org.DevNex.ChatApp.Sessions.SessionTracker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.DevNex.ChatApp.StorageServer.SpaceHelper;
 import org.DevNex.ChatApp.Utils.Helper;
 import static org.DevNex.ChatApp.Utils.Helper.CreateClass;
 
@@ -35,6 +40,7 @@ public class SocketIOHandler
     private SocketIOServer Server;
     private SessionTracker Tracker;
     private DatabaseHelper DBHelper;
+    private SpaceHelper StorageHelper;
 
     public SocketIOHandler (Server Instance, SocketIOServer Server)
     {
@@ -42,6 +48,7 @@ public class SocketIOHandler
         this.Server = Server;
         this.Tracker = Instance.GetSessionTracker ();
         this.DBHelper = Instance.GetDatabaseHelper ();
+        this.StorageHelper = App.GetSpaceHelper ();
 
         Listen ();
     }
@@ -151,6 +158,28 @@ public class SocketIOHandler
             public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
                 RemoveUserData Data = (RemoveUserData) CreateClass (RemoveUserData.class, Args);
+
+                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                {
+                    Room TargetRoom = DBHelper.GetRoom (Data.GetRoomID ());
+                    if (TargetRoom.GetClients ().contains (Data.GetUserID ()))
+                    {
+                        TargetRoom.RemoveClient (Data.GetUserID ());
+                        DBHelper.UpdateRoom (TargetRoom);
+
+                        Client.sendEvent(SocketIOEvents.REMOVE_USER.GetEventName (), TargetRoom.ToMap ());
+                    }
+
+                    else
+                    {
+                        Client.sendEvent (SocketIOEvents.REMOVE_USER.GetEventName (), new Error (ErrorType.UserNotFound, "User not in room!").ToMap ());
+                    }
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.REMOVE_USER.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
+                }
             }
         });
 
@@ -159,6 +188,24 @@ public class SocketIOHandler
             public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
                 CreateRoomData Data = (CreateRoomData) CreateClass (CreateRoomData.class, Args);
+
+                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                {
+                    Room TargetRoom = new Room (UUID.randomUUID (), Data.GetDisplay (), Data.GetUserID (), new ArrayList<> (), new HashMap<> ());
+                    TargetRoom.AddClient (Data.GetUserID ());
+                    DBHelper.AddRoom (TargetRoom);
+
+                    User TargetUser = DBHelper.GetUser (Data.GetUserID ());
+                    TargetUser.AddRoom (TargetRoom.GetID ());
+                    DBHelper.UpdateUser (TargetUser);
+
+                    Client.sendEvent (SocketIOEvents.CREATE_ROOM.GetEventName (), TargetRoom.ToMap ());
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.CREATE_ROOM.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
+                }
             }
         });
 
@@ -167,6 +214,24 @@ public class SocketIOHandler
             public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
                 JoinRemoveRoomData Data = (JoinRemoveRoomData) CreateClass (JoinRemoveRoomData.class, Args);
+
+                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                {
+                    Room TargetRoom = DBHelper.GetRoom (Data.GetRoomID ());
+                    TargetRoom.AddClient (Data.GetUserID ()); // TODO: Maybe add a check to see if the user is already in the room and send an error if the user is, but Idk
+                    DBHelper.UpdateRoom (TargetRoom);
+
+                    User TargetUser = DBHelper.GetUser (Data.GetUserID ());
+                    TargetUser.AddRoom (Data.GetRoomID ()); // Same thing for here I guess
+                    DBHelper.UpdateUser (TargetUser);
+
+                    Client.sendEvent (SocketIOEvents.JOIN_ROOM.GetEventName (), TargetUser.ToMap ());
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.JOIN_ROOM.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
+                }
             }
         });
 
@@ -175,6 +240,43 @@ public class SocketIOHandler
             public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
                 JoinRemoveRoomData Data = (JoinRemoveRoomData) CreateClass (JoinRemoveRoomData.class, Args);
+
+                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                {
+                    if (DBHelper.RoomExists (Data.GetRoomID ()))
+                    {
+                        Room TargetRoom = DBHelper.GetRoom (Data.GetRoomID ());
+
+                        if (TargetRoom.GetCreator ().equals (Data.GetUserID ()))
+                        {
+                            for (UUID UserID : TargetRoom.GetClients ())
+                            {
+                                User TargetUser = DBHelper.GetUser (UserID);
+                                TargetUser.RemoveRoom (Data.GetRoomID ());
+                                DBHelper.UpdateUser (TargetUser);
+
+                                Server.getClient (Tracker.GetSessionByToken (TargetUser.GetToken ()).GetSessionID ()).sendEvent (SocketIOEvents.REMOVE_ROOM.GetEventName (), TargetUser.ToMap ());
+                            }
+
+                            DBHelper.RemoveRoom (Data.GetRoomID ());
+                        }
+
+                        else
+                        {
+                            Client.sendEvent (SocketIOEvents.REMOVE_ROOM.GetEventName (), new Error (ErrorType.NoUserPermission, "User does not have the required permissions!").ToMap ());
+                        }
+                    }
+
+                    else
+                    {
+                        Client.sendEvent (SocketIOEvents.REMOVE_ROOM.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with ID was not found: " + Data.GetRoomID ().toString ()).ToMap ());
+                    }
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.REMOVE_ROOM.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
+                }
             }
         });
 
@@ -183,6 +285,34 @@ public class SocketIOHandler
             public void onData (SocketIOClient Client, Map Args, AckRequest Request)
             {
                 SendMessageData Data = (SendMessageData) CreateClass (SendMessageData.class, Args);
+
+                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                {
+                    if (DBHelper.RoomExists (Data.GetRoomID ()))
+                    {
+                        Message TargetMessage = new Message (UUID.randomUUID (), Data.GetRoomID (), Data.GetUserID (), Data.GetMessage ());
+                        DBHelper.AddMessage (TargetMessage);
+
+                        Room TargetRoom = DBHelper.GetRoom (Data.GetRoomID ());
+                        TargetRoom.AddMessage (TargetMessage.GetID (), TargetMessage);
+                        DBHelper.UpdateRoom (TargetRoom);
+
+                        for (UUID UserID : TargetRoom.GetClients ())
+                        {
+                            Server.getClient (Tracker.GetSessionByToken (Data.GetToken ()).GetSessionID ()).sendEvent (SocketIOEvents.REMOVE_ROOM.GetEventName (), TargetMessage.ToMap ());
+                        }
+                    }
+
+                    else
+                    {
+                        Client.sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with ID not found: " + Data.GetRoomID ().toString ()).ToMap ());
+                    }
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
+                }
             }
         });
 
@@ -264,6 +394,11 @@ public class SocketIOHandler
                 }
             }
         });
+    }
+
+    private boolean SessionExists (String Token, UUID UserID)
+    {
+        return Tracker.GetSessionByToken (Token) != null && DBHelper.GetUser (UserID).GetToken () == Token;
     }
 
 }

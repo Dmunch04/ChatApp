@@ -11,6 +11,8 @@ public enum ErrorType
     UserAlreadyExists ("UserAlreadyExists", "000"),
 
     Unknown ("Unknown", "000"),
+    InvalidSession ("InvalidSession", "000"),
+    NoUserPermission ("NoUserPermission", "000"),
 
     LoginFail ("LoginFail", "000"),
     RegisterFail ("RegisterFail", "000");

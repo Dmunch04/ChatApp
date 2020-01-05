@@ -51,11 +51,13 @@
     </repositories>
 
     <dependencies>
+        <!-- MySQL JDBC Driver -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.18</version>
         </dependency>
+        <!-- - -->
 
         <!-- java-express -->
         <dependency>
@@ -83,6 +85,14 @@
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <version>1.21</version>
+        </dependency>
+        <!-- - -->
+
+        <!-- Amazon AWS SDK -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.11.699</version>
         </dependency>
         <!-- - -->
     </dependencies>

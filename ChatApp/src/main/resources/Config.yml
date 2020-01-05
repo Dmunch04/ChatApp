@@ -9,3 +9,10 @@ Database:
   Name: Database
   Username: admin
   Password: pwd
+
+SpaceServer:
+  BucketName: a
+  Endpoint: a
+  Region: a
+  AccessKey: a
+  SecretKey: a

@@ -89,4 +89,15 @@ public class Room
     {
         return Messages;
     }
+
+    public void AddMessage (UUID ID, Message Object)
+    {
+        Messages.put (ID, Object);
+    }
+
+    public void RemoveMessage (UUID ID)
+    {
+        Messages.remove (ID);
+    }
+
 }
