@@ -1,5 +1,6 @@
 package org.DevNex.ChatApp.Sessions;
 
+import org.DevNex.ChatApp.Database.DatabaseHelper;
 import org.DevNex.ChatApp.Objects.User;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -48,6 +49,7 @@ public class Session
     public User GetUser ()
     {
         // TODO: Get user object from DB using `this.ID`
+        // Hmm. We need to find a better way, since right now each session instance would then need an `DatabaseHelper` instance
         throw new NotImplementedException ();
     }
 

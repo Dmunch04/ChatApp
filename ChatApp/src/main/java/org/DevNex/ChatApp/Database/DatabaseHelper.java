@@ -153,7 +153,7 @@ public class DatabaseHelper
         return null;
     }
 
-    public User GetUser (String Username)
+    public Object GetUser (String Username)
     {
         if (UserExists (Username))
         {
@@ -182,10 +182,12 @@ public class DatabaseHelper
             catch (SQLException Error)
             {
                 Error.printStackTrace ();
+
+                return new Error (ErrorType.Unknown, "Unknown error occurred while getting account: " + Username);
             }
         }
 
-        return null;
+        return new Error (ErrorType.UserNotFound, "User with that username doesn't exist: " + Username);
     }
 
     public String GetPassword (String Username)

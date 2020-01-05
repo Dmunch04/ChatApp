@@ -46,10 +46,6 @@ public class SocketIOHandler
         Listen ();
     }
 
-    /*
-        Send event + data to client:
-        Client.sendEvent ("event", DataClass);
-    */
     private void Listen ()
     {
         Server.addConnectListener (new ConnectListener () {
@@ -80,14 +76,34 @@ public class SocketIOHandler
             {
                 LoginRegisterData Data = (LoginRegisterData) CreateClass (LoginRegisterData.class, Args);
 
-                // TODO: Login
+                Object Result = DBHelper.GetUser (Data.GetUsername ());
 
-                // TODO: Fix `Invalid UUID string` error
-                User Target = DBHelper.GetUser (Data.GetUsername ());
-                Tracker.AddSession (new Session (Target.GetToken (), Client.getSessionId (), Target.GetID ()));
+                if (Result instanceof User)
+                {
+                    User Target = (User) Result;
 
-                // Send the User object back to the client
-                Client.sendEvent (SocketIOEvents.LOGIN.GetEventName (), Target);
+                    if (Target.GetPassword ().equals (Data.GetPassword ()))
+                    {
+                        Tracker.AddSession (new Session (Target.GetToken (), Client.getSessionId (), Target.GetID ()));
+
+                        // Send the User object back to the client
+                        Client.sendEvent (SocketIOEvents.LOGIN.GetEventName (), Target.ToMap ());
+                    }
+
+                    else
+                    {
+                        // Send the User object back to the client
+                        Client.sendEvent (SocketIOEvents.LOGIN.GetEventName (), new Error (ErrorType.LoginFail, "Wrong password entered!").ToMap ());
+                    }
+                }
+
+                else if (Result instanceof Error)
+                {
+                    Error Target = (Error) Result;
+
+                    // Send the User object back to the client
+                    Client.sendEvent (SocketIOEvents.LOGIN.GetEventName (), Target.ToMap ());
+                }
             }
         });
 
@@ -100,7 +116,6 @@ public class SocketIOHandler
                 User RegisterUser = new User (Helper.GenerateToken (28), UUID.randomUUID (), Data.GetUsername (), Data.GetPassword (), new ArrayList<UUID> ());
                 Object Result = DBHelper.AddUser (RegisterUser);
 
-                // TODO: Fix `Invalid UUID string` error
                 if (Result instanceof User)
                 {
                     User Target = (User) Result;

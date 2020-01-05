@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.Simonwep:java-express:caef9738b4">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/Simonwep/java-express/caef9738b4/java-express-caef9738b4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/Simonwep/java-express/caef9738b4/java-express-caef9738b4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/Simonwep/java-express/caef9738b4/java-express-caef9738b4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
