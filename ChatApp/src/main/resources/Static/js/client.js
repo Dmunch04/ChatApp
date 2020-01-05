@@ -26,7 +26,7 @@ export function login(username, password, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("get-salt", {Username: username});
+    sock.emit("get-salt", username);
 
     function responseHandler(salt) {
       resolve(salt);
@@ -39,23 +39,25 @@ export function login(username, password, timeout = 30000) {
       reject(new Error("timeout waiting for salt"));
       sock.removeListener('get-salt', responseHandler);
     }, timeout);
-  }).then( salt => new Promise((resolve, reject) => {
-    let timer;
+  }).then( (salt) => {
+    return new Promise((resolve, reject) => {
+      let timer;
 
-    sock.emit("login", {Username: username, Password: hash(password, {salt: salt})});
+      sock.emit("login", {Username: username, Password: hash(password, {salt: salt})});
 
-    function responseHandler(user_obj) {
-      resolve(user_obj);
-      clearTimeout(timer);
-    }
+      function responseHandler(user_obj) {
+        resolve(user_obj);
+        clearTimeout(timer);
+      }
 
-    sock.once('login', responseHandler);
+      sock.once('login', responseHandler);
 
-    timer = setTimeout(() => {
-      reject(new Error("timeout waiting for token"));
-      sock.removeListener('login', responseHandler);
-    }, timeout);
-  }));
+      timer = setTimeout(() => {
+        reject(new Error("timeout waiting for token"));
+        sock.removeListener('login', responseHandler);
+      }, timeout);
+    })
+  });
 }
 
 export function register(username, password, timeout = 30000) {

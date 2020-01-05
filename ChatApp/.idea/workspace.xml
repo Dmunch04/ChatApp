@@ -2,21 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="819a0022-1378-41b5-b6a9-af02e2a114c1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/NexChat.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/NexChat.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_core_1_11_699.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_aws_java_sdk_kms_1_11_699.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_amazonaws_jmespath_java_1_11_699.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_dataformat_jackson_dataformat_cbor_2_6_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_11.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_1_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__joda_time_joda_time_2_8_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_9.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_11.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__software_amazon_ion_ion_java_1_0_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/ErrorSystem/ErrorType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/ErrorSystem/ErrorType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/Room.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/ServerBindings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/ServerBindings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Utils/Helper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/Config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/TestClient/JS/Client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/TestClient/JS/Client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Static/dist/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Static/dist/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Static/js/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Static/js/client.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -41,6 +53,9 @@
       </MavenImportingSettings>
     </option>
   </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
   <component name="ProjectId" id="1VUG4yqnrInQSoUhbVBv8ldf4TB" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -56,10 +71,12 @@
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/JDBC-8.0.18.jar!/" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.26506025" />
+    <property name="project.structure.side.proportion" value="0.5223214" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
   <component name="RunManager" selected="Application.App (1)">
@@ -118,18 +135,27 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1577300073001</updated>
+      <workItem from="1578259172405" duration="2343000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.js" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2395" y="177" width="880" height="684" key="#Project_Structure" timestamp="1578223119209">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state x="239" y="147" width="1055" height="570" key="#Project_Structure" timestamp="1578259556360">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="239" y="147" width="1055" height="570" key="#Project_Structure/0.0.1440.900@0.0.1440.900" timestamp="1578259556360" />
     <state x="2395" y="177" key="#Project_Structure/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578223119209" />
     <state x="2395" y="177" width="880" height="684" key="#Project_Structure/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578160081367" />
+    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578259527234">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1578259527234" />
     <state x="2604" y="321" width="541" height="396" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1577633159797">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
@@ -158,28 +184,36 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2663" y="274" width="652" height="512" key="FileChooserDialogImpl/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578160077178" />
-    <state width="1878" height="270" key="GridCell.Tab.0.bottom" timestamp="1578257071007">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1398" height="215" key="GridCell.Tab.0.bottom" timestamp="1578268182195">
+      <screen x="0" y="23" width="1440" height="793" />
     </state>
+    <state width="1398" height="215" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1578268052512" />
     <state width="1878" height="270" key="GridCell.Tab.0.bottom/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578225625055" />
+    <state width="1398" height="215" key="GridCell.Tab.0.bottom/0.23.1440.793@0.23.1440.793" timestamp="1578268182195" />
     <state width="1878" height="270" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.0.1920.1032@0.0.1920.1032" timestamp="1577731281180" />
     <state width="1878" height="270" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578257071007" />
-    <state width="1878" height="270" key="GridCell.Tab.0.center" timestamp="1578257071007">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1398" height="215" key="GridCell.Tab.0.center" timestamp="1578268182194">
+      <screen x="0" y="23" width="1440" height="793" />
     </state>
+    <state width="1398" height="215" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1578268052510" />
     <state width="1878" height="270" key="GridCell.Tab.0.center/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578225625055" />
+    <state width="1398" height="215" key="GridCell.Tab.0.center/0.23.1440.793@0.23.1440.793" timestamp="1578268182194" />
     <state width="1878" height="270" key="GridCell.Tab.0.center/1920.0.1920.1080/0.0.1920.1032@0.0.1920.1032" timestamp="1577731281180" />
     <state width="1878" height="270" key="GridCell.Tab.0.center/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578257071007" />
-    <state width="1878" height="270" key="GridCell.Tab.0.left" timestamp="1578257071007">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1398" height="215" key="GridCell.Tab.0.left" timestamp="1578268182193">
+      <screen x="0" y="23" width="1440" height="793" />
     </state>
+    <state width="1398" height="215" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1578268052510" />
     <state width="1878" height="270" key="GridCell.Tab.0.left/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578225625055" />
+    <state width="1398" height="215" key="GridCell.Tab.0.left/0.23.1440.793@0.23.1440.793" timestamp="1578268182193" />
     <state width="1878" height="270" key="GridCell.Tab.0.left/1920.0.1920.1080/0.0.1920.1032@0.0.1920.1032" timestamp="1577731281180" />
     <state width="1878" height="270" key="GridCell.Tab.0.left/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578257071007" />
-    <state width="1878" height="270" key="GridCell.Tab.0.right" timestamp="1578257071007">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1398" height="215" key="GridCell.Tab.0.right" timestamp="1578268182195">
+      <screen x="0" y="23" width="1440" height="793" />
     </state>
+    <state width="1398" height="215" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1578268052512" />
     <state width="1878" height="270" key="GridCell.Tab.0.right/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578225625055" />
+    <state width="1398" height="215" key="GridCell.Tab.0.right/0.23.1440.793@0.23.1440.793" timestamp="1578268182195" />
     <state width="1878" height="270" key="GridCell.Tab.0.right/1920.0.1920.1080/0.0.1920.1032@0.0.1920.1032" timestamp="1577731281180" />
     <state width="1878" height="270" key="GridCell.Tab.0.right/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578257071007" />
     <state width="1878" height="333" key="GridCell.Tab.1.bottom" timestamp="1578185958452">
@@ -206,9 +240,10 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2384" y="151" width="992" height="737" key="SettingsEditor/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1577384706993" />
-    <state x="2559" y="343" key="com.intellij.ide.util.TipDialog" timestamp="1578251477927">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state x="479" y="275" key="com.intellij.ide.util.TipDialog" timestamp="1578259174045">
+      <screen x="0" y="0" width="1440" height="900" />
     </state>
+    <state x="479" y="275" key="com.intellij.ide.util.TipDialog/0.0.1440.900@0.0.1440.900" timestamp="1578259174045" />
     <state x="639" y="343" key="com.intellij.ide.util.TipDialog/0.0.1920.1032/1920.0.1920.1080@0.0.1920.1032" timestamp="1578217328031" />
     <state x="2559" y="343" key="com.intellij.ide.util.TipDialog/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578251477927" />
     <state x="2557" y="416" width="546" height="213" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1578137144656">

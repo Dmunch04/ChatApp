@@ -4,11 +4,11 @@ Server:
   SocketPort: 7089
 
 Database:
-  Host: example.com
-  Port: 2556
-  Name: Database
-  Username: admin
-  Password: pwd
+  Host: remotemysql.com
+  Port: 3306
+  Name: Lm35wJUNJk
+  Username: Lm35wJUNJk
+  Password: oqI505OHlM
 
 SpaceServer:
   BucketName: a
