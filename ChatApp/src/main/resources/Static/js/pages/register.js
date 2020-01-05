@@ -1,7 +1,8 @@
 'use strict';
 import React from "react";
 import { register } from "../client";
-
+import { Link } from "react-router-dom";
+import { checkIfError } from "./helpers/utils";
 
 export class Register extends React.Component {
   /*
@@ -55,7 +56,13 @@ class RegisterField extends React.Component {
   handleSubmit(event) {
     // TODO: send info to backend and check if username already exists
     if (this.state.password1 === this.state.password2) {
-      let user = register(this.state.username, this.state.password1);
+      register(this.state.username, this.state.password1).then(user_obj => {
+        if (checkIfError(user_obj)) {
+          this.setState({error: user_obj.Error});
+        } else {
+          console.log(user_obj);
+        }
+      })
     } else {
       this.setState({error: "Passwords do not match!"});
     }
@@ -70,14 +77,14 @@ class RegisterField extends React.Component {
           <input type="text" value={this.state.value} onChange={this.handleChangeUsername} />
           <br/><br/>
           Password:
-          <input type="text" value={this.state.value} onChange={this.handleChangePassword1} />
+          <input type="password" value={this.state.value} onChange={this.handleChangePassword1} />
           Re-enter Password:
-          <input type="text" value={this.state.value} onChange={this.handleChangePassword2} />
+          <input type="password" value={this.state.value} onChange={this.handleChangePassword2} />
         </label>
         <br/><br/>
-        <body>{this.state.error}</body>
-        <br/>
-        <input type="submit" value="Login" />
+        {this.state.error}
+        <br/><br/>
+        <input type="submit" value="Login"/>
       </form>
     );
   }

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack js/render.js --progress --open --mode=production",
     "start": "webpack-dev-server js/render.js --open mode=development",
-    "watch": "webpack js/render.js --progress --open --watch"
+    "watch": "webpack js/render.js --watch --mode development"
   },
   "author": "",
   "license": "MIT",

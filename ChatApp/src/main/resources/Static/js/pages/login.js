@@ -29,7 +29,7 @@ export class LoginField extends React.Component {
   */
   constructor(props) {
     super(props);
-    this.state = {username: "", password: ""};
+    this.state = {username: "", password: "", error: ""};
 
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -46,8 +46,10 @@ export class LoginField extends React.Component {
 
   handleSubmit(event) {
     // TODO: send info to backend
-    console.log(`Username: ${this.state.username}\nPassword: ${this.state.password}`);
-    let user = login(this.state.username, this.state.password);
+    login(this.state.username, this.state.password).then( user_obj => {
+        console.log(user_obj);
+      }
+    );
     event.preventDefault();
   }
 
@@ -61,7 +63,9 @@ export class LoginField extends React.Component {
           Password:
           <input type="text" value={this.state.value} onChange={this.handleChangePassword} />
         </label>
-        <br/><br/><br/>
+        <br/><br/>
+        {this.state.error}
+        <br/><br/>
         <input type="submit" value="Login" />
       </form>
     );

@@ -12,7 +12,7 @@ let sock = io("http://localhost:7089");
 let token = "";
 
 
-export function login(username, password) {
+export function login(username, password, timeout = 30000) {
   /*
     login: a function responsible for getting from backend,
     hashing it with that salt, then sending back to backend
@@ -23,17 +23,42 @@ export function login(username, password) {
     Object) -> Client
   */
 
-  sock.emit("get-salt", username);
-  sock.on("get-salt", (data) => {
-    sock.emit("login", {Username: username, Password: hash(password, {salt: data.salt})});
-    sock.on("login", (data) => {
-      token = data.hasOwnProperty("token") ? data.token : token;
-      return data;
-    });
-  });
+  return new Promise((resolve, reject) => {
+    let timer;
+
+    sock.emit("get-salt", {Username: username});
+
+    function responseHandler(salt) {
+      resolve(salt);
+      clearTimeout(timer);
+    }
+
+    sock.once('get-salt', responseHandler);
+
+    timer = setTimeout(() => {
+      reject(new Error("timeout waiting for salt"));
+      sock.removeListener('get-salt', responseHandler);
+    }, timeout);
+  }).then( salt => new Promise((resolve, reject) => {
+    let timer;
+
+    sock.emit("login", {Username: username, Password: hash(password, {salt: salt})});
+
+    function responseHandler(user_obj) {
+      resolve(user_obj);
+      clearTimeout(timer);
+    }
+
+    sock.once('login', responseHandler);
+
+    timer = setTimeout(() => {
+      reject(new Error("timeout waiting for token"));
+      sock.removeListener('login', responseHandler);
+    }, timeout);
+  }));
 }
 
-export function register(username, password) {
+export function register(username, password, timeout = 30000) {
   /*
     register: a function responsible for sending the backe-
     nd the username and password (hashed). The backend then
@@ -41,12 +66,29 @@ export function register(username, password) {
     mething like this:
     Client -> (Username + Hashed Password) -> Server -> (U-
     ser Object / Error Object)
+
+    Returns a promise
   */
 
-  sock.emit("register", {Username: username, Password: hash(password)});
-  sock.on("register", (data) => {
-    token = data.hasOwnProperty("token") ? data.token : token;
-    return data;
+  return new Promise((resolve, reject) => {
+    let timer;
+
+    sock.emit("register", {Username: username, Password: hash(password)});
+
+    function responseHandler(user_obj) {
+      resolve(user_obj);
+      clearTimeout(timer);
+    }
+
+    sock.once('register', responseHandler);
+
+    timer = setTimeout(() => {
+      reject(new Error("timeout waiting for token"));
+      sock.removeListener('register', responseHandler);
+    }, timeout);
   });
 }
 
+export function remove_user(uuid, room) {
+  return sock.emit("remove-user", {UserID: uuid, RoomID: room, Token: token});
+}

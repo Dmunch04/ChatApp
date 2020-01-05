@@ -8,12 +8,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
 } from "react-router-dom";
 import "../css/Style.css";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { Home } from "./pages/home";
+import { Rooms } from "./pages/rooms"
 
 
 class App extends React.Component {
@@ -46,6 +47,9 @@ class App extends React.Component {
         <Route exact path="/home/">
           <Home/>
         </Route>
+        <Route exact path="/rooms">
+          <Rooms/>
+        </Route>
         <Route exact path="/">
           <Home/>
         </Route>
@@ -60,7 +64,8 @@ class App extends React.Component {
   Render the site on the clients "root" div
 */
 
+
 const e = React.createElement;
 
-const domContainer = document.querySelector('#root');
+const domContainer = document.getElementById('root');
 render(e(App), domContainer);
