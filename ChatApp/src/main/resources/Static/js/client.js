@@ -8,19 +8,27 @@ import { hash } from "./pages/helpers/hash";
   rent tasks requiring access to the backend.
 */
 
-let sock = io("http://localhost:7089");
-let token = "";
+var sock = io("http://localhost:7089");
+var token = "";
+
+
+export function setToken(tokenSet) {
+  /*
+  * setToken: set the token used by the client
+  */
+  token = tokenSet;
+}
 
 
 export function login(username, password, timeout = 30000) {
   /*
-    login: a function responsible for getting from backend,
-    hashing it with that salt, then sending back to backend
-    to check if equal, then receives the user object with a
-    token. The actual structure is something like this:
-    Client -> (Username) -> Server -> (Passwords's salt) ->
-    Client -> (Password) -> Server -> (User Object / Error
-    Object) -> Client
+  * login: a function responsible for getting from backend,
+  * hashing it with that salt, then sending back to backend
+  * to check if equal, then receives the user object with a
+  * token. The actual structure is something like this:
+  * Client -> (Username) -> Server -> (Passwords's salt) ->
+  * Client -> (Password) -> Server -> (User Object / Error
+  * Object) -> Client
   */
 
   return new Promise((resolve, reject) => {
@@ -36,7 +44,7 @@ export function login(username, password, timeout = 30000) {
     sock.once('get-salt', responseHandler);
 
     timer = setTimeout(() => {
-      reject(new Error("timeout waiting for salt"));
+      reject(alert("timeout waiting for salt"));
       sock.removeListener('get-salt', responseHandler);
     }, timeout);
   }).then( (salt) => {
@@ -53,7 +61,7 @@ export function login(username, password, timeout = 30000) {
       sock.once('login', responseHandler);
 
       timer = setTimeout(() => {
-        reject(new Error("timeout waiting for token"));
+        reject(alert("timeout waiting for token"));
         sock.removeListener('login', responseHandler);
       }, timeout);
     })
@@ -62,14 +70,14 @@ export function login(username, password, timeout = 30000) {
 
 export function register(username, password, timeout = 30000) {
   /*
-    register: a function responsible for sending the backe-
-    nd the username and password (hashed). The backend then
-    generates a token which is stored. The structure is so-
-    mething like this:
-    Client -> (Username + Hashed Password) -> Server -> (U-
-    ser Object / Error Object)
-
-    Returns a promise
+  * register: a function responsible for sending the backe-
+  * nd the username and password (hashed). The backend then
+  * generates a token which is stored. The structure is so-
+  * mething like this:
+  * Client -> (Username + Hashed Password) -> Server -> (U-
+  * ser Object / Error Object)
+  *
+  * Returns a promise
   */
 
   return new Promise((resolve, reject) => {
@@ -85,7 +93,7 @@ export function register(username, password, timeout = 30000) {
     sock.once('register', responseHandler);
 
     timer = setTimeout(() => {
-      reject(new Error("timeout waiting for token"));
+      reject(alert("timeout waiting for token"));
       sock.removeListener('register', responseHandler);
     }, timeout);
   });

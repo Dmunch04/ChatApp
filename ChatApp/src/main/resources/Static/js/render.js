@@ -19,8 +19,8 @@ import { Rooms } from "./pages/rooms"
 
 class App extends React.Component {
   /*
-    App: full app responsible for routing and rendering the
-    website. It also acts as the home page when needed.
+  * App: full app responsible for routing and rendering the
+  * website. It also acts as the home page when needed.
   */
   render() {
     return <Router>
@@ -61,7 +61,7 @@ class App extends React.Component {
 /*---------------------------------------------------------------*/
 
 /*
-  Render the site on the clients "root" div
+*  Render the site on the clients "root" div
 */
 
 

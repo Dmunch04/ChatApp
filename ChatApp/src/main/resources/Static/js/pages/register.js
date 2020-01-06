@@ -1,7 +1,7 @@
 'use strict';
 import React from "react";
-import { register } from "../client";
-import { Link } from "react-router-dom";
+import {register, setToken} from "../client";
+import { Redirect } from "react-router-dom";
 import { checkIfError } from "./helpers/utils";
 
 export class Register extends React.Component {
@@ -33,7 +33,13 @@ class RegisterField extends React.Component {
   */
   constructor(props) {
     super(props);
-    this.state = {username: "", password1: "", password2: "", error: ""};
+    this.state = {
+      username: "",
+      password1: "",
+      password2: "",
+      error: "",
+      redirect: false
+    };
 
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleChangePassword1 = this.handleChangePassword1.bind(this);
@@ -60,7 +66,8 @@ class RegisterField extends React.Component {
         if (checkIfError(user_obj)) {
           this.setState({error: user_obj.Error});
         } else {
-          console.log(user_obj);
+          setToken(user_obj.token);
+          this.setState({user: user_obj, redirect: true})
         }
       })
     } else {
@@ -70,23 +77,27 @@ class RegisterField extends React.Component {
   }
 
   render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Username:
-          <input type="text" value={this.state.value} onChange={this.handleChangeUsername} />
+    if (this.state.redirect) {
+      return <Redirect to={{pathname: '/rooms', state: {user: this.state.user}}}/>;
+    } else {
+      return (
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Username:
+            <input type="text" value={this.state.value} onChange={this.handleChangeUsername} />
+            <br/><br/>
+            Password:
+            <input type="password" value={this.state.value} onChange={this.handleChangePassword1} />
+            Re-enter Password:
+            <input type="password" value={this.state.value} onChange={this.handleChangePassword2} />
+          </label>
           <br/><br/>
-          Password:
-          <input type="password" value={this.state.value} onChange={this.handleChangePassword1} />
-          Re-enter Password:
-          <input type="password" value={this.state.value} onChange={this.handleChangePassword2} />
-        </label>
-        <br/><br/>
-        {this.state.error}
-        <br/><br/>
-        <input type="submit" value="Login"/>
-      </form>
-    );
+          {this.state.error}
+          <br/><br/>
+          <input type="submit" value="Login"/>
+        </form>
+      );
+    }
   }
 }
 

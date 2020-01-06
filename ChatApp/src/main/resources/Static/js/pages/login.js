@@ -1,6 +1,7 @@
 'use strict';
 import React from "react";
-import { login } from "../client";
+import { login, setToken } from "../client";
+import {Redirect} from "react-router-dom";
 
 export class Login extends React.Component {
   /*
@@ -29,7 +30,7 @@ export class LoginField extends React.Component {
   */
   constructor(props) {
     super(props);
-    this.state = {username: "", password: "", error: ""};
+    this.state = {username: "", password: "", error: "", redirect: false};
 
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -47,28 +48,33 @@ export class LoginField extends React.Component {
   handleSubmit(event) {
     // TODO: send info to backend
     login(this.state.username, this.state.password).then( user_obj => {
-        console.log(user_obj);
+        setToken(user_obj.token);
+        this.setState({user: user_obj, redirect: true})
       }
     );
     event.preventDefault();
   }
 
   render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Username:
-          <input type="text" value={this.state.value} onChange={this.handleChangeUsername} />
+    if (this.state.redirect) {
+      return <Redirect to={{pathname: '/rooms', state: {user: this.state.user}}}/>;
+    } else {
+      return (
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Username:
+            <input type="text" value={this.state.value} onChange={this.handleChangeUsername} />
+            <br/><br/>
+            Password:
+            <input type="password" value={this.state.value} onChange={this.handleChangePassword} />
+          </label>
           <br/><br/>
-          Password:
-          <input type="text" value={this.state.value} onChange={this.handleChangePassword} />
-        </label>
-        <br/><br/>
-        {this.state.error}
-        <br/><br/>
-        <input type="submit" value="Login" />
-      </form>
-    );
+          {this.state.error}
+          <br/><br/>
+          <input type="submit" value="Login" />
+        </form>
+      );
+    }
   }
 }
 
