@@ -358,7 +358,8 @@ public class DatabaseHelper
         {
             try
             {
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable +" (Token,ID,Username,Password,Rooms) VALUE (?,?,?,?,?) WHERE ID=?");
+                // TODO: Fix SQL error here. Hmm
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " (Token,ID,Username,Password,Rooms) VALUE (?,?,?,?,?) WHERE ID=?");
                 Statement.setString (1, Target.GetToken ());
                 Statement.setString (2, Target.GetID ().toString ());
                 Statement.setString (3, Target.GetUsername ());

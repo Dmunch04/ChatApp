@@ -33,7 +33,7 @@ public class SessionTracker
     {
         for (Session Value : Sessions)
         {
-            if (Value.GetID () == ID) return Value;
+            if (Value.GetID ().equals (ID)) return Value;
         }
 
         return null;

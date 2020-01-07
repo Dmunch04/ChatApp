@@ -159,7 +159,7 @@ public class SocketIOHandler
             {
                 RemoveUserData Data = (RemoveUserData) CreateClass (RemoveUserData.class, Args);
 
-                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
                 {
                     Room TargetRoom = DBHelper.GetRoom (Data.GetRoomID ());
                     if (TargetRoom.GetClients ().contains (Data.GetUserID ()))
@@ -189,7 +189,7 @@ public class SocketIOHandler
             {
                 CreateRoomData Data = (CreateRoomData) CreateClass (CreateRoomData.class, Args);
 
-                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
                 {
                     Room TargetRoom = new Room (UUID.randomUUID (), Data.GetDisplay (), Data.GetUserID (), new ArrayList<> (), new HashMap<> ());
                     TargetRoom.AddClient (Data.GetUserID ());
@@ -215,7 +215,7 @@ public class SocketIOHandler
             {
                 JoinRemoveRoomData Data = (JoinRemoveRoomData) CreateClass (JoinRemoveRoomData.class, Args);
 
-                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
                 {
                     Room TargetRoom = DBHelper.GetRoom (Data.GetRoomID ());
                     TargetRoom.AddClient (Data.GetUserID ()); // TODO: Maybe add a check to see if the user is already in the room and send an error if the user is, but Idk
@@ -241,7 +241,7 @@ public class SocketIOHandler
             {
                 JoinRemoveRoomData Data = (JoinRemoveRoomData) CreateClass (JoinRemoveRoomData.class, Args);
 
-                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
                 {
                     if (DBHelper.RoomExists (Data.GetRoomID ()))
                     {
@@ -286,7 +286,7 @@ public class SocketIOHandler
             {
                 SendMessageData Data = (SendMessageData) CreateClass (SendMessageData.class, Args);
 
-                if (SessionExists (Data.GetToken (), Data.GetUserID ()))
+                if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
                 {
                     if (DBHelper.RoomExists (Data.GetRoomID ()))
                     {
@@ -396,9 +396,15 @@ public class SocketIOHandler
         });
     }
 
-    private boolean SessionExists (String Token, UUID UserID)
+    private boolean SessionExists (String Token, UUID UserID, UUID ClientID)
     {
-        return Tracker.GetSessionByToken (Token) != null && DBHelper.GetUser (UserID).GetToken () == Token;
+        boolean TokenMatch = Tracker.GetSessionByToken (Token) != null;
+        boolean IDMatch = Tracker.GetSessionByID (UserID) != null;
+        boolean ClientIDMatch = Tracker.GetSession (ClientID) != null;
+        boolean UserTokenMatch = DBHelper.GetUser (UserID).GetToken ().equals (Token);
+        boolean UserIDMatch = DBHelper.GetUser (UserID).GetID ().equals (UserID);
+
+        return TokenMatch && IDMatch && ClientIDMatch && UserTokenMatch && UserIDMatch;
     }
 
 }
