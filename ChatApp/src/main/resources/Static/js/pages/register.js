@@ -3,6 +3,7 @@ import React from "react";
 import {register, setToken} from "../client";
 import { Redirect } from "react-router-dom";
 import { checkIfError } from "./helpers/utils";
+import {Rooms} from "./rooms";
 
 export class Register extends React.Component {
   /*
@@ -78,7 +79,7 @@ class RegisterField extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={{pathname: '/rooms', state: {user: this.state.user}}}/>;
+      return <Redirect to={{pathname: '/rooms', user_obj: this.state.user}} component={Rooms}/>;
     } else {
       return (
         <form onSubmit={this.handleSubmit}>

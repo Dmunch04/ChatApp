@@ -20,6 +20,26 @@ export function setToken(tokenSet) {
 }
 
 
+export function getRoomName(uuid) {
+  return new Promise((resolve, reject) => {
+    let timer;
+
+    sock.emit("get-room-name", uuid);
+
+    function responseHandler(user_obj) {
+      resolve(user_obj);
+      clearTimeout(timer);
+    }
+
+    sock.once('get-room-name', responseHandler);
+
+    timer = setTimeout(() => {
+      reject(alert("timeout waiting for room name"));
+      sock.removeListener('register', responseHandler);
+    }, timeout);
+  });
+}
+
 export function login(username, password, timeout = 30000) {
   /*
   * login: a function responsible for getting from backend,

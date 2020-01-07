@@ -1,6 +1,7 @@
 'use strict';
 import React from "react";
 import { login, setToken } from "../client";
+import { Rooms } from "./rooms";
 import {Redirect} from "react-router-dom";
 
 export class Login extends React.Component {
@@ -57,7 +58,7 @@ export class LoginField extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={{pathname: '/rooms', state: {user: this.state.user}}}/>;
+      return <Redirect to={{pathname: '/rooms', user_obj: this.state.user}} component={Rooms}/>;
     } else {
       return (
         <form onSubmit={this.handleSubmit}>
