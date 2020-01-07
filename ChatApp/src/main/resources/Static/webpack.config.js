@@ -43,4 +43,4 @@ module.exports = {
             template: path.resolve(__dirname, "html/index.html"),
         })
     ]
-}
+};

@@ -13,21 +13,32 @@ class RoomsComp extends React.Component {
   constructor(props) {
     super(props);
     this.user = this.props.location.user_obj;
-    this.props = {
-      rooms: this.user === "." ? [] : this.user.split(",")
-    }
+    console.log(this.user);
+    let rooms_id_list = this.user.Rooms === "." ? [] : this.user.Rooms.split(",");
+    this.state = {
+      rooms: []
+    };
+
+    rooms_id_list.forEach((uuid, index) => {
+      this.state.rooms[index] = {
+        label: getRoomName(uuid).then( (room_name) => {
+          return room_name
+        }),
+        value: uuid,
+        room_obj: null
+      }
+    });
+    console.log(this.props.rooms)
   }
 
-  getRoomNameMet(uuid) {
-    return getRoomName(uuid).then( (room_name) => {
-      return room_name
-    } )
-  }
+  handleChange = selectedOption => {
+    console.log(`Option selected:`, selectedOption)
+  };
 
   render() {
     return <div>
       <h1>Rooms</h1>
-      <Select/>
+      <Select options={this.state.rooms} onChange={this.handleChange}/>
     </div>
   }
 }
