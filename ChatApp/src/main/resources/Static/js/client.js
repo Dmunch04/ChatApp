@@ -19,6 +19,25 @@ export function setToken(tokenSet) {
   token = tokenSet;
 }
 
+export function createRoom(display, creator) {
+  return new Promise((resolve, reject) => {
+    let timer;
+
+    sock.emit("create-room", {Token: token, Display: display, UserID: creator});
+
+    function responseHandler(room_obj) {
+      resolve(room_obj);
+      clearTimeout(timer);
+    }
+
+    sock.once("create-room", responseHandler);
+
+    timer = setTimeout(() => {
+      reject(alert("timeout waiting for room name"));
+      sock.removeListener('create-room', responseHandler);
+    }, timeout);
+  });
+}
 
 export function getRoomName(uuid) {
   return new Promise((resolve, reject) => {
@@ -26,16 +45,16 @@ export function getRoomName(uuid) {
 
     sock.emit("get-room-name", uuid);
 
-    function responseHandler(user_obj) {
-      resolve(user_obj);
+    function responseHandler(room_name) {
+      resolve(room_name);
       clearTimeout(timer);
     }
 
-    sock.once('get-room-name', responseHandler);
+    sock.once("get-room-name", responseHandler);
 
     timer = setTimeout(() => {
       reject(alert("timeout waiting for room name"));
-      sock.removeListener('register', responseHandler);
+      sock.removeListener('get-room-name', responseHandler);
     }, timeout);
   });
 }
@@ -61,7 +80,7 @@ export function login(username, password, timeout = 30000) {
       clearTimeout(timer);
     }
 
-    sock.once('get-salt', responseHandler);
+    sock.once("get-salt", responseHandler);
 
     timer = setTimeout(() => {
       reject(alert("timeout waiting for salt"));
@@ -78,7 +97,7 @@ export function login(username, password, timeout = 30000) {
         clearTimeout(timer);
       }
 
-      sock.once('login', responseHandler);
+      sock.once("login", responseHandler);
 
       timer = setTimeout(() => {
         reject(alert("timeout waiting for token"));
@@ -110,7 +129,7 @@ export function register(username, password, timeout = 30000) {
       clearTimeout(timer);
     }
 
-    sock.once('register', responseHandler);
+    sock.once("register", responseHandler);
 
     timer = setTimeout(() => {
       reject(alert("timeout waiting for token"));

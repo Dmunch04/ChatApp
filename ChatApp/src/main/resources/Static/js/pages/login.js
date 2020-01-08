@@ -47,7 +47,6 @@ export class LoginField extends React.Component {
   }
 
   handleSubmit(event) {
-    // TODO: send info to backend
     login(this.state.username, this.state.password).then( user_obj => {
         setToken(user_obj.token);
         this.setState({user: user_obj, redirect: true})
