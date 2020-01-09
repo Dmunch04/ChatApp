@@ -5,10 +5,10 @@ Server:
 
 Database:
   Host: remotemysql.com
-  Port: 3306
-  Name: Lm35wJUNJk
-  Username: Lm35wJUNJk
-  Password: oqI505OHlM
+  Port: a
+  Name: a
+  Username: a
+  Password: a
 
 SpaceServer:
   BucketName: a
