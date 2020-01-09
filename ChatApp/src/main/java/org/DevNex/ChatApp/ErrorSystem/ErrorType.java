@@ -3,19 +3,21 @@ package org.DevNex.ChatApp.ErrorSystem;
 public enum ErrorType
 {
 
+    // HTTP Status Codes: https://httpstatuses.com/
+    
     UserNotFound ("UserNotFound", "404"),
     RoomNotFound ("RoomNotFound", "404"),
     MessageNotFound ("MessageNotFound", "404"),
 
-    RoomAlreadyExists ("RoomAlreadyExists", "000"),
-    UserAlreadyExists ("UserAlreadyExists", "000"),
+    RoomAlreadyExists ("RoomAlreadyExists", "208"),
+    UserAlreadyExists ("UserAlreadyExists", "208"),
 
-    Unknown ("Unknown", "000"),
-    InvalidSession ("InvalidSession", "000"),
-    NoUserPermission ("NoUserPermission", "000"),
+    Unknown ("Unknown", "500"),
+    InvalidSession ("InvalidSession", "401"),
+    NoUserPermission ("NoUserPermission", "403"),
 
-    LoginFail ("LoginFail", "000"),
-    RegisterFail ("RegisterFail", "000");
+    LoginFail ("LoginFail", "401"),
+    RegisterFail ("RegisterFail", "401");
 
     private String Name;
     private String Code;
