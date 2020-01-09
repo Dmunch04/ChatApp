@@ -48,7 +48,7 @@ export class LoginField extends React.Component {
 
   handleSubmit(event) {
     login(this.state.username, this.state.password).then( user_obj => {
-        setToken(user_obj.token);
+        setToken(user_obj.Token);
         this.setState({user: user_obj, redirect: true})
       }
     );

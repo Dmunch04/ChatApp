@@ -67,7 +67,7 @@ class RegisterField extends React.Component {
         if (checkIfError(user_obj)) {
           this.setState({error: user_obj.Error});
         } else {
-          setToken(user_obj.token);
+          setToken(user_obj.Token);
           this.setState({user: user_obj, redirect: true})
         }
       })

@@ -12,16 +12,19 @@ export let Rooms = withRouter(({ location }) => {
 class CreateRoom extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {name: ""}
+    this.state = {name: ""};
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangeName = this.handleChangeName.bind(this)
   }
 
   handleSubmit(event) {
     createRoom(this.state.name, this.props.uuid).then(
       (room) => {
         console.log(room);
-        //this.props.changeRoom()
+        this.props.addRoom(room.Display, room.ID, room);
       }
     );
+    this.props.toggleRedirectCreateRoom();
     event.preventDefault();
   }
 
@@ -35,9 +38,9 @@ class CreateRoom extends React.Component {
         Chat Room Name:
         <input type="text" value={this.state.value} onChange={this.handleChangeName} />
       </label>
-      <br/><br/>
+      <br/>
       {this.state.error}
-      <br/><br/>
+      <br/>
       <input type="submit" value="Create" />
     </form>
   }
@@ -50,7 +53,7 @@ class RoomsComp extends React.Component {
     let rooms_id_list = this.user.Rooms === "." ? [] : this.user.Rooms.split(",");
     this.state = {
       rooms: [],
-      redirect: false
+      redirectCreateRoom: false
     };
 
     rooms_id_list.forEach((uuid, index) => {
@@ -70,7 +73,7 @@ class RoomsComp extends React.Component {
     console.log(`Option selected:`, selectedOption)
   };
 
-  changeRoom(room_name, uuid, room_obj) {
+  addRoom(room_name, uuid, room_obj) {
     this.setState(prevState => ({
       rooms: [...prevState.rooms, {
         label: room_name,
@@ -80,13 +83,17 @@ class RoomsComp extends React.Component {
     }));
   }
 
+  toggleRedirectCreateRoom() {
+    this.setState({ redirectCreateRoom: !this.state.redirectCreateRoom })
+  }
+
   render() {
-    if (this.state.newRoom) {
-      return <CreateRoom uuid={this.user.ID} changeRoom={this.changeRoom}/>
+    if (this.state.redirectCreateRoom) {
+      return <CreateRoom uuid={this.user.ID} changeRoom={this.changeRoom} toggleRedirectCreateRoom={this.toggleRedirectCreateRoom}/>
     } else {
       return <div>
         <h1>Rooms</h1>
-        <button onClick={() => this.state.newRoom = true}>Create new room</button>
+        <button onClick={() => this.setState({ redirectCreateRoom: true })}>Create new room</button>
         <Select options={this.state.rooms} onChange={this.handleChange}/>
       </div>
     }

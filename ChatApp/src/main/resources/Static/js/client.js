@@ -19,7 +19,7 @@ export function setToken(tokenSet) {
   token = tokenSet;
 }
 
-export function createRoom(display, creator) {
+export function createRoom(display, creator, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
