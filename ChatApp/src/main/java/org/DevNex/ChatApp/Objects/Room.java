@@ -82,7 +82,7 @@ public class Room
             ClientsString.append (Client.toString ()).append (",");
         }
 
-        return ClientsString.substring (0, Clients.size () - 1);
+        return ClientsString.substring (0, ClientsString.toString ().length () - 1);
     }
 
     public Map<UUID, Message> GetMessages ()

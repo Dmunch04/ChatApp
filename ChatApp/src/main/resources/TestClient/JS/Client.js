@@ -25,7 +25,7 @@ Sock.on ('login', (Result) => {
     Sock.emit ('create-room', { Token: Result.Token, Display: 'TestServer', UserID: Result.ID })
     Sock.on ('create-room', (Result) => {
         console.log (Result);
-        Sock.emit ('send-message', { Token: User.Token, User.ID, Result.ID, 'Test!' });
+        Sock.emit ('send-message', { Token: User.Token, UserID: User.ID, RoomID: Result.ID, Message: 'Test!' });
         Sock.on ('send-message', (Result) => {
             console.log (Result);
         });

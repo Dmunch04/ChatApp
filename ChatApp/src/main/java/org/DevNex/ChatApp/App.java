@@ -26,7 +26,6 @@ public class App
         Map<String, Object> DBConfig = (Map<String, Object>) Config.get ("Database");
         Map<String, Object> SpaceConfig = (Map<String, Object>) Config.get ("SpaceServer");
 
-        // TODO: Add the Driver in Maven as well, so it can come in the build!
         Database = new DatabaseHandler (
                 DBConfig.get ("Host").toString (),
                 DBConfig.get ("Port").toString (),

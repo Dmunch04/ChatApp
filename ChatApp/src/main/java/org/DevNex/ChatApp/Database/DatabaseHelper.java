@@ -97,7 +97,7 @@ public class DatabaseHelper
 
                 String ClientsList = Results.getString ("Clients");
                 List<UUID> Clients = new ArrayList<UUID> ();
-                if (!ClientsList.equals ("."))
+                if (!ClientsList.equals (".") && !ClientsList.isEmpty ())
                 {
                     String[] ClientsArray = ClientsList.split (",");
                     for (String Client : ClientsArray)
@@ -132,7 +132,7 @@ public class DatabaseHelper
 
                 String RoomsList = Results.getString ("Rooms");
                 List<UUID> Rooms = new ArrayList<UUID> ();
-                if (!RoomsList.equals ("."))
+                if (!RoomsList.equals (".") && !RoomsList.isEmpty ())
                 {
                     String[] RoomsArray = RoomsList.split (",");
                     for (String Room : RoomsArray)
@@ -167,7 +167,7 @@ public class DatabaseHelper
 
                 String RoomsList = Results.getString ("Rooms");
                 List<UUID> Rooms = new ArrayList<UUID> ();
-                if (!RoomsList.equals ("."))
+                if (!RoomsList.equals (".") && !RoomsList.isEmpty ())
                 {
                     String[] RoomsArray = RoomsList.split (",");
                     for (String Room : RoomsArray)
@@ -224,28 +224,33 @@ public class DatabaseHelper
                 Statement.setString (1, RoomID.toString ());
 
                 ResultSet Results = Statement.executeQuery ();
-                Results.next ();
-
-                Map<UUID, Message> Messages = new HashMap<UUID, Message> ();
-                Messages.put (
-                        UUID.fromString (Results.getString ("ID")),
-                        new Message (
-                                UUID.fromString (Results.getString ("ID")),
-                                RoomID,
-                                UUID.fromString (Results.getString ("Sender")),
-                                Results.getString ("Content")
-                        )
-                );
-
-                while (Results.next ())
+                if (Results.next ())
                 {
-                    UUID ID = UUID.fromString (Results.getString ("ID"));
-                    UUID Sender = UUID.fromString (Results.getString ("Sender"));
-                    String Content = Results.getString ("Content");
-                    Messages.put (ID, new Message (ID, RoomID, Sender, Content));
+                    //Results.next ();
+
+                    Map<UUID, Message> Messages = new HashMap<UUID, Message> ();
+                    Messages.put (
+                            UUID.fromString (Results.getString ("ID")),
+                            new Message (
+                                    UUID.fromString (Results.getString ("ID")),
+                                    RoomID,
+                                    UUID.fromString (Results.getString ("Sender")),
+                                    Results.getString ("Content")
+                            )
+                    );
+
+                    while (Results.next ())
+                    {
+                        UUID ID = UUID.fromString (Results.getString ("ID"));
+                        UUID Sender = UUID.fromString (Results.getString ("Sender"));
+                        String Content = Results.getString ("Content");
+                        Messages.put (ID, new Message (ID, RoomID, Sender, Content));
+                    }
+
+                    return Messages;
                 }
 
-                return Messages;
+                return new HashMap<UUID, Message> ();
             }
 
             catch (SQLException Error)
@@ -285,14 +290,12 @@ public class DatabaseHelper
         {
             try
             {
-                //PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + RoomsTable + " (ID,Creator,Clients) VALUE (?,?,?) WHERE ID=?");
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + RoomsTable + " SET ID=? Display=? Creator=? Clients=? ID=?");
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + RoomsTable + " SET ID=?, Display=?, Creator=?, Clients=? WHERE ID=?");
                 Statement.setString (1, Target.GetID ().toString ());
                 Statement.setString (2, Target.GetDisplay ());
                 Statement.setString (3, Target.GetCreator ().toString ());
                 Statement.setString (4, Target.GetClientsString ());
                 Statement.setString (5, Target.GetID ().toString ());
-                System.out.println (Target.GetClientsString ());
 
                 Statement.executeUpdate ();
             }
@@ -312,6 +315,8 @@ public class DatabaseHelper
             {
                 PreparedStatement Statement = Database.GetConnection ().prepareStatement ("DELETE FROM " + RoomsTable + " WHERE ID=?");
                 Statement.setString (1, RoomID.toString ());
+
+                Statement.executeQuery ();
 
                 return true;
             }
@@ -361,9 +366,7 @@ public class DatabaseHelper
         {
             try
             {
-                // TODO: Fix SQL error here. Hmm
-                //PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " (Token,ID,Username,Password,Rooms) VALUE (?,?,?,?,?) WHERE ID=?");
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " SET Token=? ID=? Username=? Password=? Rooms=? WHERE ID=?");
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " SET Token=?, ID=?, Username=?, Password=?, Rooms=? WHERE ID=?");
                 Statement.setString (1, Target.GetToken ());
                 Statement.setString (2, Target.GetID ().toString ());
                 Statement.setString (3, Target.GetUsername ());
@@ -390,6 +393,8 @@ public class DatabaseHelper
                 PreparedStatement Statement = Database.GetConnection ().prepareStatement ("DELETE FROM " + UsersTable + " WHERE ID=?");
                 Statement.setString (1, UserID.toString ());
 
+                Statement.executeQuery ();
+
                 return true;
             }
 
@@ -409,7 +414,7 @@ public class DatabaseHelper
         {
             try
             {
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + MessagesTable +" (ID,Room,Sender,Content) VALUE (?,?,?,?))");
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + MessagesTable + " (ID,Room,Sender,Content) VALUE (?,?,?,?)");
                 Statement.setString (1, Target.GetID ().toString ());
                 Statement.setString (2, Target.GetRoomID ().toString ());
                 Statement.setString (3, Target.GetSenderID ().toString ());
