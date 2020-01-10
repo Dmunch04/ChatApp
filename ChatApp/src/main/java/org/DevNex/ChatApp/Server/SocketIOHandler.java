@@ -297,6 +297,8 @@ public class SocketIOHandler
                         TargetRoom.AddMessage (TargetMessage.GetID (), TargetMessage);
                         DBHelper.UpdateRoom (TargetRoom);
 
+                        System.out.println (TargetMessage.GetContent ());
+
                         for (UUID UserID : TargetRoom.GetClients ())
                         {
                             Server.getClient (Tracker.GetSessionByToken (Data.GetToken ()).GetSessionID ()).sendEvent (SocketIOEvents.REMOVE_ROOM.GetEventName (), TargetMessage.ToMap ());

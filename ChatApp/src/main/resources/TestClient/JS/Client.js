@@ -21,8 +21,13 @@ var Sock = io ("http://localhost:7089");
 Sock.emit ('login', { Username: 'Munchii', Password: '$2y$12$9UGnuDVlOovPhuKzo5xfN.jcinpaGu19l4dZsTAxFOTE6a.c.HxSO' });
 Sock.on ('login', (Result) => {
     console.log (Result);
+    var User = Result;
     Sock.emit ('create-room', { Token: Result.Token, Display: 'TestServer', UserID: Result.ID })
     Sock.on ('create-room', (Result) => {
         console.log (Result);
+        Sock.emit ('send-message', { Token: User.Token, User.ID, Result.ID, 'Test!' });
+        Sock.on ('send-message', (Result) => {
+            console.log (Result);
+        });
     });
 });

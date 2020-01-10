@@ -263,10 +263,11 @@ public class DatabaseHelper
         {
             try
             {
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + RoomsTable + " (ID,Creator,Clients) VALUE (?,?,?)");
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + RoomsTable + " (ID,Display,Creator,Clients) VALUE (?,?,?,?)");
                 Statement.setString (1, Target.GetID ().toString ());
-                Statement.setString (2, Target.GetCreator ().toString ());
-                Statement.setString (3, Target.GetClientsString ());
+                Statement.setString (2, Target.GetDisplay ());
+                Statement.setString (3, Target.GetCreator ().toString ());
+                Statement.setString (4, Target.GetClientsString ());
 
                 Statement.executeUpdate ();
             }
@@ -284,11 +285,13 @@ public class DatabaseHelper
         {
             try
             {
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + RoomsTable + " (ID,Creator,Clients) VALUE (?,?,?) WHERE ID=?");
+                //PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + RoomsTable + " (ID,Creator,Clients) VALUE (?,?,?) WHERE ID=?");
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + RoomsTable + " SET ID=? Display=? Creator=? Clients=? ID=?");
                 Statement.setString (1, Target.GetID ().toString ());
-                Statement.setString (2, Target.GetCreator ().toString ());
-                Statement.setString (3, Target.GetClientsString ());
-                Statement.setString (4, Target.GetID ().toString ());
+                Statement.setString (2, Target.GetDisplay ());
+                Statement.setString (3, Target.GetCreator ().toString ());
+                Statement.setString (4, Target.GetClientsString ());
+                Statement.setString (5, Target.GetID ().toString ());
                 System.out.println (Target.GetClientsString ());
 
                 Statement.executeUpdate ();
@@ -359,7 +362,8 @@ public class DatabaseHelper
             try
             {
                 // TODO: Fix SQL error here. Hmm
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " (Token,ID,Username,Password,Rooms) VALUE (?,?,?,?,?) WHERE ID=?");
+                //PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " (Token,ID,Username,Password,Rooms) VALUE (?,?,?,?,?) WHERE ID=?");
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " SET Token=? ID=? Username=? Password=? Rooms=? WHERE ID=?");
                 Statement.setString (1, Target.GetToken ());
                 Statement.setString (2, Target.GetID ().toString ());
                 Statement.setString (3, Target.GetUsername ());
