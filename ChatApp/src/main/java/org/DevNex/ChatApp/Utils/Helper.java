@@ -21,8 +21,7 @@ public class Helper
 
     public static String GetSalt (String Hash)
     {
-        String[] hash_parts = Hash.split ("\\$");
-        return String.format("$%s$%s$%s", hash_parts[1], hash_parts[2], hash_parts[3].substring (0, 22));
+        return Hash.substring (0, 29);
     }
 
     public static UUID MakeUUID (String UUIDString) {

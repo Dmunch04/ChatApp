@@ -3,15 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="819a0022-1378-41b5-b6a9-af02e2a114c1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Database/DatabaseHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Database/DatabaseHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/ServerBindings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/ServerBindings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Utils/Helper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/TestClient/JS/Client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/TestClient/JS/Client.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
