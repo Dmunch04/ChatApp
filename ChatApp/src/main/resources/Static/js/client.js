@@ -20,11 +20,11 @@ export function setToken(tokenSet) {
 }
 
 
-export function getRoom(uuid, userID) {
+export function getRoom(uuid, userID, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("get-room", {RoomID: uuid, UserID: userID});
+    sock.emit("get-room", {Token: token, RoomID: uuid, UserID: userID});
 
     function responseHandler(room) {
       resolve(room);
@@ -86,7 +86,7 @@ export function sendMessage(roomID, userID, message, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("send-message", {Token: token, RoomID: roomID, UserID: userID, Content: message});
+    sock.emit("send-message", {Token: token, RoomID: roomID, UserID: userID, Message: message});
 
     function responseHandler(message_obj) {
       resolve(message_obj);
@@ -162,11 +162,11 @@ export function createRoom(display, creator, timeout = 30000) {
   });
 }
 
-export function getUser(uuid) {
+export function getUser(uuid, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("get-user", uuid);
+    sock.emit("get-user", {Token: token, UserID:uuid, Data: uuid});
 
     function responseHandler(user) {
       resolve(user);
@@ -182,11 +182,11 @@ export function getUser(uuid) {
   });
 }
 
-export function getMessage(roomID, messageID) {
+export function getMessage(roomID, messageID, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("get-message", {RoomID: roomID, MessageID: messageID});
+    sock.emit("get-message", {Token: token, RoomID: roomID, MessageID: messageID});
 
     function responseHandler(username) {
       resolve(username);
@@ -202,11 +202,11 @@ export function getMessage(roomID, messageID) {
   });
 }
 
-export function getUsername(uuid) {
+export function getUsername(uuid, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("get-user-name", uuid);
+    sock.emit("get-user-name", {UserID: uuid, Token: token});
 
     function responseHandler(username) {
       resolve(username);
@@ -222,14 +222,13 @@ export function getUsername(uuid) {
   });
 }
 
-export function getRoomName(uuid) {
+export function getRoomName(uuid, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
-
     sock.emit("get-room-name", uuid);
 
     function responseHandler(room_name) {
-      resolve(room_name);
+      resolve({roomName: room_name, uuid: uuid});
       clearTimeout(timer);
     }
 

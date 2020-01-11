@@ -3,14 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="819a0022-1378-41b5-b6a9-af02e2a114c1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Database/DatabaseHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Database/DatabaseHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/Room.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Objects/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/ServerBindings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/ServerBindings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Server/SocketIOHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Utils/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/DevNex/ChatApp/Utils/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Static/dist/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Static/dist/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Static/js/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Static/js/client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Static/js/pages/rooms.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Static/js/pages/rooms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Static/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Static/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Static/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Static/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Static/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/Static/webpack.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/TestClient/JS/Client.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/TestClient/JS/Client.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,6 +20,20 @@
   </component>
   <component name="CodeStyleSettingsInfer">
     <option name="done" value="true" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -179,36 +193,36 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2663" y="274" width="652" height="512" key="FileChooserDialogImpl/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578160077178" />
-    <state width="1878" height="270" key="GridCell.Tab.0.bottom" timestamp="1578748526218">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1398" height="279" key="GridCell.Tab.0.bottom" timestamp="1578785978026">
+      <screen x="0" y="23" width="1440" height="793" />
     </state>
-    <state width="1398" height="240" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1578709920370" />
+    <state width="1398" height="279" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1578785323653" />
     <state width="1878" height="270" key="GridCell.Tab.0.bottom/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578225625055" />
-    <state width="1398" height="240" key="GridCell.Tab.0.bottom/0.23.1440.793@0.23.1440.793" timestamp="1578708035383" />
+    <state width="1398" height="279" key="GridCell.Tab.0.bottom/0.23.1440.793@0.23.1440.793" timestamp="1578785978026" />
     <state width="1878" height="270" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.0.1920.1032@0.0.1920.1032" timestamp="1577731281180" />
     <state width="1878" height="270" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578748526218" />
-    <state width="1878" height="270" key="GridCell.Tab.0.center" timestamp="1578748526218">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1398" height="279" key="GridCell.Tab.0.center" timestamp="1578785978025">
+      <screen x="0" y="23" width="1440" height="793" />
     </state>
-    <state width="1398" height="240" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1578709920369" />
+    <state width="1398" height="279" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1578785323652" />
     <state width="1878" height="270" key="GridCell.Tab.0.center/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578225625055" />
-    <state width="1398" height="240" key="GridCell.Tab.0.center/0.23.1440.793@0.23.1440.793" timestamp="1578708035382" />
+    <state width="1398" height="279" key="GridCell.Tab.0.center/0.23.1440.793@0.23.1440.793" timestamp="1578785978025" />
     <state width="1878" height="270" key="GridCell.Tab.0.center/1920.0.1920.1080/0.0.1920.1032@0.0.1920.1032" timestamp="1577731281180" />
     <state width="1878" height="270" key="GridCell.Tab.0.center/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578748526218" />
-    <state width="1878" height="270" key="GridCell.Tab.0.left" timestamp="1578748526217">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1398" height="279" key="GridCell.Tab.0.left" timestamp="1578785978024">
+      <screen x="0" y="23" width="1440" height="793" />
     </state>
-    <state width="1398" height="240" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1578709920368" />
+    <state width="1398" height="279" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1578785323651" />
     <state width="1878" height="270" key="GridCell.Tab.0.left/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578225625055" />
-    <state width="1398" height="240" key="GridCell.Tab.0.left/0.23.1440.793@0.23.1440.793" timestamp="1578708035381" />
+    <state width="1398" height="279" key="GridCell.Tab.0.left/0.23.1440.793@0.23.1440.793" timestamp="1578785978024" />
     <state width="1878" height="270" key="GridCell.Tab.0.left/1920.0.1920.1080/0.0.1920.1032@0.0.1920.1032" timestamp="1577731281180" />
     <state width="1878" height="270" key="GridCell.Tab.0.left/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578748526217" />
-    <state width="1878" height="270" key="GridCell.Tab.0.right" timestamp="1578748526218">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1398" height="279" key="GridCell.Tab.0.right" timestamp="1578785978026">
+      <screen x="0" y="23" width="1440" height="793" />
     </state>
-    <state width="1398" height="240" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1578709920369" />
+    <state width="1398" height="279" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1578785323653" />
     <state width="1878" height="270" key="GridCell.Tab.0.right/0.0.1920.1032/1920.0.1920.1080@1920.0.1920.1080" timestamp="1578225625055" />
-    <state width="1398" height="240" key="GridCell.Tab.0.right/0.23.1440.793@0.23.1440.793" timestamp="1578708035382" />
+    <state width="1398" height="279" key="GridCell.Tab.0.right/0.23.1440.793@0.23.1440.793" timestamp="1578785978026" />
     <state width="1878" height="270" key="GridCell.Tab.0.right/1920.0.1920.1080/0.0.1920.1032@0.0.1920.1032" timestamp="1577731281180" />
     <state width="1878" height="270" key="GridCell.Tab.0.right/1920.0.1920.1080/0.0.1920.1032@1920.0.1920.1080" timestamp="1578748526218" />
     <state width="1878" height="333" key="GridCell.Tab.1.bottom" timestamp="1578696015922">
@@ -249,6 +263,11 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="378" y="72" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1440.900@0.0.1440.900" timestamp="1578708436653" />
+    <state x="503" y="398" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1578775745047">
+      <screen x="0" y="23" width="1440" height="793" />
+    </state>
+    <state x="503" y="398" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1578754022548" />
+    <state x="503" y="398" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.793@0.23.1440.793" timestamp="1578775745047" />
     <state x="2020" y="100" width="1720" height="832" key="dock-window-1" timestamp="1578158568508">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>

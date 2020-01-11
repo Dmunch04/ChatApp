@@ -38,6 +38,9 @@ module.exports = {
             }
         ]
     },
+    node: {
+        fs: 'empty'
+    },
     plugins: [
         new HtmlWebPackPlugin({
             template: path.resolve(__dirname, "html/index.html"),
