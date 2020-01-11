@@ -13,14 +13,16 @@ public class User
     private String Username;
     private String Password;
     private List<UUID> Rooms;
+    private UserStatus Status;
 
-    public User (String Token, UUID ID, String Username, String Password, List<UUID> Rooms)
+    public User (String Token, UUID ID, String Username, String Password, List<UUID> Rooms, UserStatus Status)
     {
         this.Token = Token;
         this.ID = ID;
         this.Username = Username;
         this.Password = Password;
         this.Rooms = Rooms;
+        this.Status = Status;
     }
 
     public Map<String, Object> ToMap ()
@@ -30,6 +32,7 @@ public class User
         Objects.put ("ID", ID.toString ());
         Objects.put ("Username", Username);
         Objects.put ("Rooms", GetRoomsString ());
+        Objects.put ("Status", Status.GetStatusName ());
 
         return Objects;
     }
@@ -86,7 +89,17 @@ public class User
             RoomsString.append (Room.toString ()).append (",");
         }
 
-        return RoomsString.substring (0, Rooms.size () - 1);
+        return RoomsString.substring (0, RoomsString.toString ().length () - 1);
+    }
+
+    public UserStatus GetStatus ()
+    {
+        return Status;
+    }
+
+    public void SetStatus (UserStatus Status)
+    {
+        this.Status = Status;
     }
 
 }

@@ -15,6 +15,7 @@ import org.DevNex.ChatApp.Objects.Data.*;
 import org.DevNex.ChatApp.Objects.Message;
 import org.DevNex.ChatApp.Objects.Room;
 import org.DevNex.ChatApp.Objects.User;
+import org.DevNex.ChatApp.Objects.UserStatus;
 import org.DevNex.ChatApp.Sessions.ActionType;
 import org.DevNex.ChatApp.Sessions.Session;
 import org.DevNex.ChatApp.Sessions.SessionTracker;
@@ -120,7 +121,7 @@ public class SocketIOHandler
             {
                 LoginRegisterData Data = (LoginRegisterData) CreateClass (LoginRegisterData.class, Args);
 
-                User RegisterUser = new User (Helper.GenerateToken (28), UUID.randomUUID (), Data.GetUsername (), Data.GetPassword (), new ArrayList<UUID> ());
+                User RegisterUser = new User (Helper.GenerateToken (28), UUID.randomUUID (), Data.GetUsername (), Data.GetPassword (), new ArrayList<UUID> (), UserStatus.ONLINE);
                 Object Result = DBHelper.AddUser (RegisterUser);
 
                 if (Result instanceof User)
@@ -235,6 +236,49 @@ public class SocketIOHandler
             }
         });
 
+        Server.addEventListener (SocketIOEvents.LEAVE_ROOM.GetEventName (), Map.class, new DataListener<Map> () {
+            @Override
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request)
+            {
+                JoinRemoveRoomData Data = (JoinRemoveRoomData) CreateClass (JoinRemoveRoomData.class, Args);
+
+                if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
+                {
+                    if (DBHelper.RoomExists (Data.GetRoomID ()))
+                    {
+                        Room TargetRoom = DBHelper.GetRoom (Data.GetRoomID ());
+
+                        if (TargetRoom.HasClient (Data.GetUserID ()))
+                        {
+                            TargetRoom.RemoveClient (Data.GetUserID ());
+                            DBHelper.UpdateRoom (TargetRoom);
+
+                            User TargetUser = DBHelper.GetUser (Data.GetUserID ());
+                            TargetUser.RemoveRoom (Data.GetRoomID ());
+                            DBHelper.UpdateUser (TargetUser);
+
+                            Client.sendEvent (SocketIOEvents.LEAVE_ROOM.GetEventName (), TargetUser.ToMap ());
+                        }
+
+                        else
+                        {
+                            Client.sendEvent (SocketIOEvents.LEAVE_ROOM.GetEventName (), new Error (ErrorType.UserNotFound, "User with ID was not found in server: " + Data.GetUserID ().toString ()).ToMap ());
+                        }
+                    }
+
+                    else
+                    {
+                        Client.sendEvent (SocketIOEvents.LEAVE_ROOM.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with ID was not found: " + Data.GetRoomID ().toString ()).ToMap ());
+                    }
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.LEAVE_ROOM.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
+                }
+            }
+        });
+
         Server.addEventListener (SocketIOEvents.REMOVE_ROOM.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
             public void onData (SocketIOClient Client, Map Args, AckRequest Request)
@@ -332,17 +376,27 @@ public class SocketIOHandler
             }
         });
 
-        Server.addEventListener(SocketIOEvents.GET_ROOM.GetEventName (), String.class, new DataListener<String> () {
+        Server.addEventListener(SocketIOEvents.GET_ROOM.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, String Data, AckRequest Request) throws Exception
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request) throws Exception
             {
-                if (DBHelper.RoomExists (UUID.fromString (Data)))
+                StringData Data = (StringData) CreateClass (StringData.class, Args);
+
+                if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
                 {
-                    Client.sendEvent (SocketIOEvents.GET_ROOM.GetEventName (), DBHelper.GetRoom (UUID.fromString (Data)).ToMap ());
+                    if (DBHelper.RoomExists (UUID.fromString (Data.GetData ())))
+                    {
+                        Client.sendEvent (SocketIOEvents.GET_ROOM.GetEventName (), DBHelper.GetRoom (UUID.fromString (Data.GetData ())).ToMap ());
+                    }
+                    else
+                    {
+                        Client.sendEvent (SocketIOEvents.GET_ROOM_NAME.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with the ID was not found: " + Data));
+                    }
                 }
+
                 else
                 {
-                    Client.sendEvent (SocketIOEvents.GET_ROOM_NAME.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with the ID was not found: " + Data));
+                    Client.sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
                 }
             }
         });
@@ -363,18 +417,30 @@ public class SocketIOHandler
             }
         });
 
-        Server.addEventListener(SocketIOEvents.GET_USER.GetEventName (), String.class, new DataListener<String> () {
+        Server.addEventListener(SocketIOEvents.GET_USER.GetEventName (), Map.class, new DataListener<Map> () {
             @Override
-            public void onData (SocketIOClient Client, String Data, AckRequest Request) throws Exception
+            public void onData (SocketIOClient Client, Map Args, AckRequest Request) throws Exception
             {
-                if (DBHelper.UserExists (UUID.fromString (Data)))
+                StringData Data = (StringData) CreateClass (StringData.class, Args);
+
+                if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
                 {
-                    Client.sendEvent (SocketIOEvents.GET_USER.GetEventName (), DBHelper.GetUser (UUID.fromString (Data)).ToMap ());
+                    if (DBHelper.UserExists (UUID.fromString (Data.GetData ())))
+                    {
+                        User Target = DBHelper.GetUser (UUID.fromString (Data.GetData ()));
+                        if (Tracker.GetSessionByID (Target.GetID ()) == null) Target.SetStatus (UserStatus.OFFLINE);
+                        Client.sendEvent (SocketIOEvents.GET_USER.GetEventName (), Target.ToMap ());
+                    }
+
+                    else
+                    {
+                        Client.sendEvent (SocketIOEvents.GET_USER.GetEventName (), new Error (ErrorType.UserNotFound, "User with the ID was not found: " + Data));
+                    }
                 }
 
                 else
                 {
-                    Client.sendEvent (SocketIOEvents.GET_USER.GetEventName (), new Error (ErrorType.UserNotFound, "User with the ID was not found: " + Data));
+                    Client.sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
                 }
             }
         });

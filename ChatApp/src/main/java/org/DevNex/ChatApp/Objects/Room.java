@@ -63,6 +63,11 @@ public class Room
         }
     }
 
+    public boolean HasClient (UUID ID)
+    {
+        return Clients.contains (ID);
+    }
+
     public void RemoveClient (UUID ID)
     {
         if (Clients.contains (ID))

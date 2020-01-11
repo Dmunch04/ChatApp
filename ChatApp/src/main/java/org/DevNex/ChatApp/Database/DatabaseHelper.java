@@ -5,6 +5,8 @@ import org.DevNex.ChatApp.ErrorSystem.ErrorType;
 import org.DevNex.ChatApp.Objects.Message;
 import org.DevNex.ChatApp.Objects.Room;
 import org.DevNex.ChatApp.Objects.User;
+import org.DevNex.ChatApp.Objects.UserStatus;
+import org.DevNex.ChatApp.Utils.Helper;
 
 import java.sql.PreparedStatement;
 
@@ -141,7 +143,7 @@ public class DatabaseHelper
                     }
                 }
 
-                return new User (Results.getString ("Token"), ID, Results.getString ("Username"), Results.getString ("Password"), Rooms);
+                return new User (Results.getString ("Token"), ID, Results.getString ("Username"), Results.getString ("Password"), Rooms, Helper.GetFromString (Results.getString ("Status")));
             }
 
             catch (SQLException Error)
@@ -176,7 +178,7 @@ public class DatabaseHelper
                     }
                 }
 
-                return new User (Results.getString ("Token"), UUID.fromString (Results.getString ("ID")), Username, Results.getString ("Password"), Rooms);
+                return new User (Results.getString ("Token"), UUID.fromString (Results.getString ("ID")), Username, Results.getString ("Password"), Rooms, Helper.GetFromString (Results.getString ("Status")));
             }
 
             catch (SQLException Error)
@@ -337,12 +339,13 @@ public class DatabaseHelper
         {
             try
             {
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + UsersTable +" (Token,ID,Username,Password,Rooms) VALUE (?,?,?,?,?)");
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("INSERT INTO " + UsersTable +" (Token,ID,Username,Password,Rooms,Status) VALUE (?,?,?,?,?,?)");
                 Statement.setString (1, Target.GetToken ());
                 Statement.setString (2, Target.GetID ().toString ());
                 Statement.setString (3, Target.GetUsername ());
                 Statement.setString (4, Target.GetPassword ());
                 Statement.setString (5, Target.GetRoomsString ());
+                Statement.setString (6, Target.GetStatus ().GetStatusName ());
 
                 Statement.executeUpdate ();
 
@@ -366,13 +369,14 @@ public class DatabaseHelper
         {
             try
             {
-                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " SET Token=?, ID=?, Username=?, Password=?, Rooms=? WHERE ID=?");
+                PreparedStatement Statement = Database.GetConnection ().prepareStatement ("UPDATE " + UsersTable + " SET Token=?, ID=?, Username=?, Password=?, Rooms=?, Status=? WHERE ID=?");
                 Statement.setString (1, Target.GetToken ());
                 Statement.setString (2, Target.GetID ().toString ());
                 Statement.setString (3, Target.GetUsername ());
                 Statement.setString (4, Target.GetPassword ());
                 Statement.setString (5, Target.GetRoomsString ());
-                Statement.setString (6, Target.GetID ().toString ());
+                Statement.setString (6, Target.GetStatus ().GetStatusName ());
+                Statement.setString (7, Target.GetID ().toString ());
 
                 Statement.executeUpdate ();
             }

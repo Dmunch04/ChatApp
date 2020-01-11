@@ -18,7 +18,14 @@ var Sock = io ("http://localhost:7089");
     //console.log (Result);
 //});
 
-Sock.emit ('login', { Username: 'Munchii', Password: '$2y$12$9UGnuDVlOovPhuKzo5xfN.jcinpaGu19l4dZsTAxFOTE6a.c.HxSO' });
+/*
+Sock.emit ('register', { Username: 'Munchii', Password: '$2y$12$IoFdWWWnN1vzb0mFA150u.y85TrnPmvxdzkKPXl9YQZZEkb34YjEK' });
+Sock.on ('register', (Result) => {
+    console.log (Result);
+});
+*/
+
+Sock.emit ('login', { Username: 'Munchii', Password: '$2y$12$IoFdWWWnN1vzb0mFA150u.y85TrnPmvxdzkKPXl9YQZZEkb34YjEK' });
 Sock.on ('login', (Result) => {
     console.log (Result);
     var User = Result;
@@ -28,6 +35,16 @@ Sock.on ('login', (Result) => {
         Sock.emit ('send-message', { Token: User.Token, UserID: User.ID, RoomID: Result.ID, Message: 'Test!' });
         Sock.on ('send-message', (Result) => {
             console.log (Result);
+            Sock.emit ('get-user', { Token: User.Token, UserID: User.ID, Data: User.ID });
+            Sock.on ('get-user', (Result) => {
+                console.log (Result);
+                var User = Result;
+                var TargetRoomID = User.Rooms.split (',')[0];
+                Sock.emit ('leave-room', { Token: User.Token, UserID: User.ID, RoomID: TargetRoomID });
+                Sock.on ('leave-room', (Result) => {
+                    console.log (Result);
+                });
+            });
         });
     });
 });

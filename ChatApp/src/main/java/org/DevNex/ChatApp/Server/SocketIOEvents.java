@@ -9,6 +9,7 @@ public enum SocketIOEvents
 
     CREATE_ROOM ("create-room"),
     JOIN_ROOM ("join-room"),
+    LEAVE_ROOM ("leave-room"),
     REMOVE_ROOM ("remove-room"),
 
     SEND_MESSAGE ("send-message"),

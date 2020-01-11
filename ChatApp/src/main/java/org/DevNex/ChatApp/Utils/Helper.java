@@ -1,5 +1,7 @@
 package org.DevNex.ChatApp.Utils;
 
+import org.DevNex.ChatApp.Objects.UserStatus;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
@@ -68,6 +70,18 @@ public class Helper
         }
 
         return Token.toString();
+    }
+
+    public static UserStatus GetFromString (String Status)
+    {
+        switch (Status)
+        {
+            case "Offline": return UserStatus.OFFLINE;
+            case "Online": return UserStatus.ONLINE;
+            case "Away": return UserStatus.AWAY;
+            case "Do Not Disturb": return UserStatus.DO_NOT_DISTURB;
+            default: return UserStatus.OFFLINE;
+        }
     }
 
 }
