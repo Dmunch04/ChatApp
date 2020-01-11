@@ -146,11 +146,19 @@ public class SocketIOHandler
         Server.addEventListener(SocketIOEvents.GET_PASSWORD_SALT.GetEventName (), String.class, new DataListener<String> () {
             @Override
             public void onData (SocketIOClient Client, String Data, AckRequest Request) throws Exception {
-                String Password = DBHelper.GetPassword (Data);
+                if (DBHelper.UserExists (Data))
+                {
+                    String Password = DBHelper.GetPassword (Data);
 
-                String Salt = Helper.GetSalt (Password);
+                    String Salt = Helper.GetSalt (Password);
 
-                Client.sendEvent (SocketIOEvents.GET_PASSWORD_SALT.GetEventName (), Salt);
+                    Client.sendEvent (SocketIOEvents.GET_PASSWORD_SALT.GetEventName (), Salt);
+                }
+
+                else
+                {
+                    Client.sendEvent (SocketIOEvents.GET_PASSWORD_SALT.GetEventName (), new Error (ErrorType.UserNotFound, "User with username not found: " + Data));
+                }
             }
         });
 
