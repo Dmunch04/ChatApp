@@ -85,12 +85,12 @@ class RegisterField extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <label>
             Username:
-            <input type="text" value={this.state.value} onChange={this.handleChangeUsername} />
+            <input type="text" autoComplete="username" value={this.state.value} onChange={this.handleChangeUsername} />
             <br/><br/>
             Password:
-            <input type="password" value={this.state.value} onChange={this.handleChangePassword1} />
+            <input type="password" autoComplete="password" value={this.state.value} onChange={this.handleChangePassword1} />
             Re-enter Password:
-            <input type="password" value={this.state.value} onChange={this.handleChangePassword2} />
+            <input type="password" autoComplete="password" value={this.state.value} onChange={this.handleChangePassword2} />
           </label>
           <br/><br/>
           {this.state.error}

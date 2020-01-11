@@ -63,10 +63,10 @@ export class LoginField extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <label>
             Username:
-            <input type="text" value={this.state.value} onChange={this.handleChangeUsername} />
+            <input type="text" autoComplete="username" value={this.state.value} onChange={this.handleChangeUsername} />
             <br/><br/>
             Password:
-            <input type="password" value={this.state.value} onChange={this.handleChangePassword} />
+            <input type="password" autoComplete="password" value={this.state.value} onChange={this.handleChangePassword} required />
           </label>
           <br/><br/>
           {this.state.error}

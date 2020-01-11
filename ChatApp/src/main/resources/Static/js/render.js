@@ -64,7 +64,6 @@ class App extends React.Component {
 *  Render the site on the clients "root" div
 */
 
-
 const e = React.createElement;
 
 const domContainer = document.getElementById('root');

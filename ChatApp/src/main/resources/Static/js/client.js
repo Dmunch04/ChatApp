@@ -20,6 +20,27 @@ export function setToken(tokenSet) {
 }
 
 
+export function getRoom(uuid, userID) {
+  return new Promise((resolve, reject) => {
+    let timer;
+
+    sock.emit("get-room", {RoomID: uuid, UserID: userID});
+
+    function responseHandler(room) {
+      resolve(room);
+      clearTimeout(timer);
+    }
+
+    sock.once("get-room", responseHandler);
+
+    timer = setTimeout(() => {
+      reject(alert("timeout getting room obj"));
+      sock.removeListener('get-room', responseHandler);
+    }, timeout);
+  });
+}
+
+
 export function kickUser(roomID, userID, targetID, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
@@ -35,7 +56,7 @@ export function kickUser(roomID, userID, targetID, timeout = 30000) {
 
     timer = setTimeout(() => {
       reject(alert("timeout removing message"));
-      sock.removeListener('create-room', responseHandler);
+      sock.removeListener("kick-user", responseHandler);
     }, timeout);
   });
 }
@@ -55,7 +76,7 @@ export function removeMessage(roomID, userID, messageID, timeout = 30000) {
 
     timer = setTimeout(() => {
       reject(alert("timeout removing message"));
-      sock.removeListener('create-room', responseHandler);
+      sock.removeListener("remove-message", responseHandler);
     }, timeout);
   });
 }
@@ -65,7 +86,7 @@ export function sendMessage(roomID, userID, message, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("send-message", {Token: token, RoomID: roomID, UserID: userID, Message: message});
+    sock.emit("send-message", {Token: token, RoomID: roomID, UserID: userID, Content: message});
 
     function responseHandler(message_obj) {
       resolve(message_obj);
@@ -76,7 +97,7 @@ export function sendMessage(roomID, userID, message, timeout = 30000) {
 
     timer = setTimeout(() => {
       reject(alert("timeout sending message"));
-      sock.removeListener('create-room', responseHandler);
+      sock.removeListener("send-message", responseHandler);
     }, timeout);
   });
 }
@@ -96,7 +117,7 @@ export function leaveRoom(roomID, userID, timeout = 30000) {
 
     timer = setTimeout(() => {
       reject(alert("timeout leaving room"));
-      sock.removeListener('create-room', responseHandler);
+      sock.removeListener("remove-room", responseHandler);
     }, timeout);
   });
 }
@@ -116,7 +137,7 @@ export function joinRoom(roomID, userID, timeout = 30000) {
 
     timer = setTimeout(() => {
       reject(alert("timeout joining room"));
-      sock.removeListener('create-room', responseHandler);
+      sock.removeListener("join-room", responseHandler);
     }, timeout);
   });
 }
@@ -156,7 +177,7 @@ export function getUser(uuid) {
 
     timer = setTimeout(() => {
       reject(alert("timeout getting user"));
-      sock.removeListener('get-room-name', responseHandler);
+      sock.removeListener("get-user", responseHandler);
     }, timeout);
   });
 }
@@ -176,7 +197,7 @@ export function getMessage(roomID, messageID) {
 
     timer = setTimeout(() => {
       reject(alert("timeout getting username"));
-      sock.removeListener('get-room-name', responseHandler);
+      sock.removeListener("get-message", responseHandler);
     }, timeout);
   });
 }
@@ -196,7 +217,7 @@ export function getUsername(uuid) {
 
     timer = setTimeout(() => {
       reject(alert("timeout getting username"));
-      sock.removeListener('get-room-name', responseHandler);
+      sock.removeListener("get-user-name", responseHandler);
     }, timeout);
   });
 }

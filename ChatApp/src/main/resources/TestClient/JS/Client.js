@@ -31,3 +31,9 @@ Sock.on ('login', (Result) => {
         });
     });
 });
+
+/*
+{Content: "Test!", ID: "1942623e-2b4b-4758-afc9-6cf56d68ec3d",
+RoomID: "10043974-be72-4db6-a255-06076ed49ad0",
+SenderID: "def788ff-8f3e-46cd-aa15-ac7eed0386e5"}
+ */
