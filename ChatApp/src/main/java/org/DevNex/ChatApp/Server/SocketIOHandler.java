@@ -398,13 +398,13 @@ public class SocketIOHandler
                     }
                     else
                     {
-                        Client.sendEvent (SocketIOEvents.GET_ROOM_NAME.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with the ID was not found: " + Data));
+                        Client.sendEvent (SocketIOEvents.GET_ROOM.GetEventName (), new Error (ErrorType.RoomNotFound, "Room with the ID was not found: " + Data));
                     }
                 }
 
                 else
                 {
-                    Client.sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
+                    Client.sendEvent (SocketIOEvents.GET_ROOM.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
                 }
             }
         });
@@ -448,7 +448,7 @@ public class SocketIOHandler
 
                 else
                 {
-                    Client.sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
+                    Client.sendEvent (SocketIOEvents.GET_USER.GetEventName (), new Error (ErrorType.InvalidSession, "Current session is not valid!").ToMap ());
                 }
             }
         });
