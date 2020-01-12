@@ -1,6 +1,6 @@
 'use strict';
 import React from "react";
-import {register, setToken} from "../client";
+import {register, setToken, setUser} from "../client";
 import { Redirect } from "react-router-dom";
 import { checkIfError } from "./helpers/utils";
 import {Rooms} from "./rooms";
@@ -68,6 +68,7 @@ class RegisterField extends React.Component {
           this.setState({error: user_obj.Error});
         } else {
           setToken(user_obj.Token);
+          setUser(user_obj);
           this.setState({user: user_obj, redirect: true})
         }
       })

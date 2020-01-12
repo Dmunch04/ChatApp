@@ -1,6 +1,6 @@
 'use strict';
 import React from "react";
-import { login, setToken } from "../client";
+import { login, setToken, setUser } from "../client";
 import { Rooms } from "./rooms";
 import {Redirect} from "react-router-dom";
 
@@ -49,6 +49,7 @@ export class LoginField extends React.Component {
   handleSubmit(event) {
     login(this.state.username, this.state.password).then( user_obj => {
         setToken(user_obj.Token);
+        setUser(user_obj);
         this.setState({user: user_obj, redirect: true})
       }
     );

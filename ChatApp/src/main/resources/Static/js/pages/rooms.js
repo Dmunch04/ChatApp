@@ -7,9 +7,19 @@ import { getRoomName, getRoom, createRoom, getUsername, sendMessage} from "../cl
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
+var user = {};
+
 export let Rooms = withRouter(({ location }) => {
   return <RoomsComp location={location}/>
 });
+
+function getSafe(fn, defaultVal) {
+  try {
+    return fn();
+  } catch (e) {
+    return defaultVal;
+  }
+}
 
 class CreateRoom extends React.Component {
   constructor(props) {
@@ -18,7 +28,7 @@ class CreateRoom extends React.Component {
   }
 
   handleSubmit = (event) => {
-    createRoom(this.state.name, this.props.uuid).then(
+    createRoom(this.state.name).then(
       (room) => {
         console.log(room);
         this.props.addRoom(room.Display, room.ID, room);
@@ -51,8 +61,10 @@ class RoomsComp extends React.Component {
 
   constructor(props) {
     super(props);
-    this.user = this.props.location.user_obj;
-    this.rooms_id_list = this.user.Rooms === "." ? [] : this.user.Rooms.split(",");
+    if (this.props.location.user_obj) {
+      user = this.props.location.user_obj;
+    }
+    this.rooms_id_list = user.Rooms === "." ? [] : user.Rooms.split(",");
     this.state = {
       rooms: {},
       selectedRoom: "",
@@ -63,16 +75,15 @@ class RoomsComp extends React.Component {
     };
   }
 
-  handleChange = selectedOption => {
-    this.setState({selectedRoom: selectedOption.value});
+  handleChange = async(selectedOption) => {
     if (this.state.rooms[selectedOption.value].room_obj === null) {
-      this.setState(prevState => ({
-        rooms: {...prevState.rooms, [selectedOption.value]: {
-            ...prevState.rooms[selectedOption.value],
-            room_obj: getRoom(selectedOption.value).then((room_obj) => { return room_obj; })
-          }}
-      }));
+      const room_obj = await getRoom(selectedOption.value);
+      let rooms = {...this.state.rooms, [selectedOption.value]: {
+          ...this.state.rooms[selectedOption.value], room_obj: room_obj
+        }};
+      this.setState({rooms: rooms});
     }
+    this.setState({selectedRoom: selectedOption.value});
     this.renderRoomMessages();
   };
 
@@ -92,15 +103,14 @@ class RoomsComp extends React.Component {
     this.setState({ redirectCreateRoom: !this.state.redirectCreateRoom})
   };
 
-  handleSendMessage = (event) => {
-    sendMessage(this.state.selectedRoom, this.user.ID, this.state.message).then((message_obj) => {
-      this.setState(prevState => ({
-        rooms: {...prevState.rooms, [this.state.selectedRoom]: {
-            ...prevState.rooms[this.state.selectedRoom],
-            room_obj: {...prevState.rooms[this.state.selectedRoom].room_obj, Messages: prevState.rooms[this.state.selectedRoom].room_obj.Messages.concat(message_obj)}
-          }}
-      }));
-    });
+  handleSendMessage = async(event) => {
+    let message_obj = await sendMessage(this.state.selectedRoom, this.state.message)
+    this.setState(prevState => ({
+     rooms: {...prevState.rooms, [this.state.selectedRoom]: {
+         ...prevState.rooms[this.state.selectedRoom],
+         room_obj: {...prevState.rooms[this.state.selectedRoom].room_obj, Messages: prevState.rooms[this.state.selectedRoom].room_obj.Messages.concat(message_obj)}
+       }}
+    }));
     this.renderRoomMessages();
     event.preventDefault();
   };
@@ -109,29 +119,28 @@ class RoomsComp extends React.Component {
     this.setState({message: event.target.value})
   };
 
-  renderRoomMessages = () => {
-    const messages = this.state.rooms[this.state.selectedRoom] && this.state.rooms[this.state.selectedRoom].room_obj && this.state.rooms[this.state.selectedRoom].room_obj.Messages;
-    console.log(messages);
-    if (typeof messages !== "undefined") {
-      const messages_list = messages.map((message_obj, index) => {
-        return getUsername(message_obj.SenderID).then((username) => <div key={index}>{username}:{message_obj.Message}</div>)
-      });
+  renderRoomMessages = async() => {
+    const messages = getSafe(() => this.state.rooms[this.state.selectedRoom].room_obj.Messages, []);
+    if (messages.length > 0 && Object.entries(messages[0]).length !== 0) {
+      let messages_list = [];
+      console.log("messages:", messages);
+      for (const [i, message] of messages.entries()) {
+        const username = await getUsername(message.SenderID);
+        messages_list.push(<div key={i}>{username}:{message.Message}</div>);
+      }
       this.setState({messagesList: messages_list, doneRendering: true}, () => {
         console.log("state: ", this.state);
       });
     }
   };
 
-  updateRooms() {
-    this.rooms_id_list.forEach((uuid, _) => {
-      getRoomName(uuid).then((values) => {this.setState((previousState) => {
-        return {rooms: {...previousState.rooms, [values.uuid]: {
-            label: values.roomName,
-            value: values.uuid,
-            room_obj: null
-          }}}
-      })});
-    });
+  async updateRooms() {
+    let roomsState = {...this.state.rooms};
+    for (const uuid of this.rooms_id_list) {
+      const roomName = await getRoomName(uuid);
+      roomsState[uuid] = {label: roomName, value: uuid, room_obj: null};
+    }
+    this.setState({rooms: roomsState});
   }
 
   componentDidMount() {
@@ -148,14 +157,14 @@ class RoomsComp extends React.Component {
       console.log(this.state.messagesList);
     }
     if (this.state.redirectCreateRoom) {
-      return <CreateRoom uuid={this.user.ID} addRoom={this.addRoom} toggleRedirectCreateRoom={this.toggleRedirectCreateRoom}/>
+      return <CreateRoom addRoom={this.addRoom} toggleRedirectCreateRoom={this.toggleRedirectCreateRoom}/>
     } else {
       return <div>
         <h1>Rooms</h1>
         <button onClick={() => this.setState({redirectCreateRoom: true})}>Create new room</button>
         <Select options={Object.values(this.state.rooms)} onChange={this.handleChange}/>
         <div style={{overflowY: "scroll", height:400, border: "1px solid black"}}>
-          {this.state.doneRendering? this.state.messagesList : ""}
+          {this.state.doneRendering? this.state.messagesList : "Loading"}
         </div>
         <form onSubmit={this.handleSendMessage}>
           <label>

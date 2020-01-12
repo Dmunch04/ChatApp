@@ -10,6 +10,7 @@ import { hash } from "./pages/helpers/hash";
 
 var sock = io("http://localhost:7089");
 var token = "";
+var userObj = {};
 
 
 export function setToken(tokenSet) {
@@ -19,12 +20,18 @@ export function setToken(tokenSet) {
   token = tokenSet;
 }
 
+export function setUser(userSet) {
+  /*
+  * setUser: set the user used by the client
+  */
+  userObj = userSet;
+}
 
-export function getRoom(uuid, userID, timeout = 30000) {
+
+export function getRoom(uuid, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
-
-    sock.emit("get-room", {Token: token, RoomID: uuid, UserID: userID});
+    sock.emit("get-room", {Token: token, Data: uuid, UserID: userObj.ID});
 
     function responseHandler(room) {
       resolve(room);
@@ -41,11 +48,11 @@ export function getRoom(uuid, userID, timeout = 30000) {
 }
 
 
-export function kickUser(roomID, userID, targetID, timeout = 30000) {
+export function kickUser(roomID, targetID, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("kick-user", {Token: token, RoomID: roomID, UserID: userID, TargetID: targetID});
+    sock.emit("kick-user", {Token: token, RoomID: roomID, UserID: userObj.ID, TargetID: targetID});
 
     function responseHandler(worked) {
       resolve(worked);
@@ -61,11 +68,11 @@ export function kickUser(roomID, userID, targetID, timeout = 30000) {
   });
 }
 
-export function removeMessage(roomID, userID, messageID, timeout = 30000) {
+export function removeMessage(roomID, messageID, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("remove-message", {Token: token, RoomID: roomID, UserID: userID, MessageID: messageID});
+    sock.emit("remove-message", {Token: token, RoomID: roomID, UserID: userObj.ID, MessageID: messageID});
 
     function responseHandler(worked) {
       resolve(worked);
@@ -82,11 +89,11 @@ export function removeMessage(roomID, userID, messageID, timeout = 30000) {
 }
 
 
-export function sendMessage(roomID, userID, message, timeout = 30000) {
+export function sendMessage(roomID, message, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("send-message", {Token: token, RoomID: roomID, UserID: userID, Message: message});
+    sock.emit("send-message", {Token: token, RoomID: roomID, UserID: userObj.ID, Message: message});
 
     function responseHandler(message_obj) {
       resolve(message_obj);
@@ -102,11 +109,11 @@ export function sendMessage(roomID, userID, message, timeout = 30000) {
   });
 }
 
-export function leaveRoom(roomID, userID, timeout = 30000) {
+export function leaveRoom(roomID, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("remove-room", {Token: token, RoomID: roomID, UserID: userID});
+    sock.emit("remove-room", {Token: token, RoomID: roomID, UserID: userObj.ID});
 
     function responseHandler(worked) {
       resolve(worked);
@@ -122,11 +129,11 @@ export function leaveRoom(roomID, userID, timeout = 30000) {
   });
 }
 
-export function joinRoom(roomID, userID, timeout = 30000) {
+export function joinRoom(roomID, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("join-room", {Token: token, RoomID: roomID, UserID: userID});
+    sock.emit("join-room", {Token: token, RoomID: roomID, UserID: userObj.ID});
 
     function responseHandler(room_obj) {
       resolve(room_obj);
@@ -142,11 +149,11 @@ export function joinRoom(roomID, userID, timeout = 30000) {
   });
 }
 
-export function createRoom(display, creator, timeout = 30000) {
+export function createRoom(display, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("create-room", {Token: token, Display: display, UserID: creator});
+    sock.emit("create-room", {Token: token, Display: display, UserID: userObj.ID});
 
     function responseHandler(room_obj) {
       resolve(room_obj);
@@ -166,7 +173,7 @@ export function getUser(uuid, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
 
-    sock.emit("get-user", {Token: token, UserID:uuid, Data: uuid});
+    sock.emit("get-user", {Token: token, UserID: userObj.ID, Data: uuid});
 
     function responseHandler(user) {
       resolve(user);
@@ -205,8 +212,7 @@ export function getMessage(roomID, messageID, timeout = 30000) {
 export function getUsername(uuid, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
-
-    sock.emit("get-user-name", {UserID: uuid, Token: token});
+    sock.emit("get-user-name", uuid);
 
     function responseHandler(username) {
       resolve(username);
@@ -225,10 +231,11 @@ export function getUsername(uuid, timeout = 30000) {
 export function getRoomName(uuid, timeout = 30000) {
   return new Promise((resolve, reject) => {
     let timer;
+
     sock.emit("get-room-name", uuid);
 
     function responseHandler(room_name) {
-      resolve({roomName: room_name, uuid: uuid});
+      resolve(room_name);
       clearTimeout(timer);
     }
 
