@@ -108,7 +108,7 @@ public class DatabaseHelper
                     }
                 }
 
-                return new Room (ID, Results.getString ("Display"), UUID.fromString (Results.getString ("Creator")), Clients, GetRoomMessages (ID));
+                return new Room (ID, Results.getString ("Display"), UUID.fromString (Results.getString ("Creator")), Helper.DefaultIconID, Clients, GetRoomMessages (ID));
             }
 
             catch (SQLException Error)
@@ -143,7 +143,7 @@ public class DatabaseHelper
                     }
                 }
 
-                return new User (Results.getString ("Token"), ID, Results.getString ("Username"), Results.getString ("Password"), Rooms, Helper.GetFromString (Results.getString ("Status")));
+                return new User (Results.getString ("Token"), ID, Results.getString ("Username"), Results.getString ("Password"), Helper.DefaultIconID, Rooms, Helper.GetFromString (Results.getString ("Status")));
             }
 
             catch (SQLException Error)
@@ -178,7 +178,7 @@ public class DatabaseHelper
                     }
                 }
 
-                return new User (Results.getString ("Token"), UUID.fromString (Results.getString ("ID")), Username, Results.getString ("Password"), Rooms, Helper.GetFromString (Results.getString ("Status")));
+                return new User (Results.getString ("Token"), UUID.fromString (Results.getString ("ID")), Username, Results.getString ("Password"), Helper.DefaultIconID, Rooms, Helper.GetFromString (Results.getString ("Status")));
             }
 
             catch (SQLException Error)

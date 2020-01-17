@@ -14,6 +14,8 @@ public class Helper
 
     private static final String Characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?-#$@";
 
+    public static final String DefaultIconID = "NONE";
+
     public static Timestamp GetTimestamp ()
     {
         return new Timestamp (new Date ().getTime ());
@@ -81,6 +83,20 @@ public class Helper
             case "Do Not Disturb": return UserStatus.DO_NOT_DISTURB;
             default: return UserStatus.OFFLINE;
         }
+    }
+
+    public static String MapToJSON (Map<Object, Object> Target)
+    {
+        StringBuilder JSON = new StringBuilder ().append ("{");
+
+        for (Object Key : Target.keySet ())
+        {
+            JSON.append ("\"" + Key.toString () + "\"" + ":" + "\"" + Target.get (Key).toString () + "\"");
+        }
+
+        JSON.append ("}");
+
+        return JSON.toString ();
     }
 
 }

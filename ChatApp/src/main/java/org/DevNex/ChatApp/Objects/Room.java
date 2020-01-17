@@ -11,14 +11,16 @@ public class Room
     private UUID ID;
     private String Display;
     private UUID Creator;
+    private String Icon;
     private List<UUID> Clients;
     private Map<UUID, Message> Messages;
 
-    public Room (UUID ID, String Display, UUID Creator, List<UUID> Clients, Map<UUID, Message> Messages)
+    public Room (UUID ID, String Display, UUID Creator, String Icon, List<UUID> Clients, Map<UUID, Message> Messages)
     {
         this.ID = ID;
         this.Display = Display;
         this.Creator = Creator;
+        this.Icon = Icon;
         this.Clients = Clients;
         this.Messages = Messages;
     }
@@ -48,6 +50,16 @@ public class Room
     public UUID GetCreator ()
     {
         return Creator;
+    }
+
+    public String GetIcon ()
+    {
+        return Icon;
+    }
+
+    public void SetIcon (String Icon)
+    {
+        this.Icon = Icon;
     }
 
     public List<UUID> GetClients ()

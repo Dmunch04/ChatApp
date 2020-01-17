@@ -121,7 +121,7 @@ public class SocketIOHandler
             {
                 LoginRegisterData Data = (LoginRegisterData) CreateClass (LoginRegisterData.class, Args);
 
-                User RegisterUser = new User (Helper.GenerateToken (28), UUID.randomUUID (), Data.GetUsername (), Data.GetPassword (), new ArrayList<UUID> (), UserStatus.ONLINE);
+                User RegisterUser = new User (Helper.GenerateToken (28), UUID.randomUUID (), Data.GetUsername (), Data.GetPassword (), Helper.DefaultIconID, new ArrayList<UUID> (), UserStatus.ONLINE);
                 Object Result = DBHelper.AddUser (RegisterUser);
 
                 if (Result instanceof User)
@@ -200,7 +200,7 @@ public class SocketIOHandler
 
                 if (SessionExists (Data.GetToken (), Data.GetUserID (), Client.getSessionId ()))
                 {
-                    Room TargetRoom = new Room (UUID.randomUUID (), Data.GetDisplay (), Data.GetUserID (), new ArrayList<> (), new HashMap<> ());
+                    Room TargetRoom = new Room (UUID.randomUUID (), Data.GetDisplay (), Data.GetUserID (), Helper.DefaultIconID, new ArrayList<> (), new HashMap<> ());
                     TargetRoom.AddClient (Data.GetUserID ());
                     DBHelper.AddRoom (TargetRoom);
 

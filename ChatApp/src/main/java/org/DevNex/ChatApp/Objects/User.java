@@ -12,15 +12,17 @@ public class User
     private UUID ID;
     private String Username;
     private String Password;
+    private String Icon;
     private List<UUID> Rooms;
     private UserStatus Status;
 
-    public User (String Token, UUID ID, String Username, String Password, List<UUID> Rooms, UserStatus Status)
+    public User (String Token, UUID ID, String Username, String Password, String Icon, List<UUID> Rooms, UserStatus Status)
     {
         this.Token = Token;
         this.ID = ID;
         this.Username = Username;
         this.Password = Password;
+        this.Icon = Icon;
         this.Rooms = Rooms;
         this.Status = Status;
     }
@@ -31,6 +33,19 @@ public class User
         Objects.put ("Token", Token);
         Objects.put ("ID", ID.toString ());
         Objects.put ("Username", Username);
+        Objects.put ("Icon", Icon);
+        Objects.put ("Rooms", GetRoomsString ());
+        Objects.put ("Status", Status.GetStatusName ());
+
+        return Objects;
+    }
+
+    public Map<String, String> ToSafeMap ()
+    {
+        Map<String, String> Objects = new HashMap<String, String>();
+        Objects.put ("ID", ID.toString ());
+        Objects.put ("Username", Username);
+        Objects.put ("Icon", Icon);
         Objects.put ("Rooms", GetRoomsString ());
         Objects.put ("Status", Status.GetStatusName ());
 
@@ -55,6 +70,21 @@ public class User
     public String GetPassword ()
     {
         return Password;
+    }
+
+    public void SetPassword (String Password)
+    {
+        this.Password = Password;
+    }
+
+    public String GetIcon ()
+    {
+        return Icon;
+    }
+
+    public void SetIcon (String Icon)
+    {
+        this.Icon = Icon;
     }
 
     public List<UUID> GetRooms ()
