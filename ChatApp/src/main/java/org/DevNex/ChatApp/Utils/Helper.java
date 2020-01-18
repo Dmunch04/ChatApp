@@ -1,13 +1,12 @@
 package org.DevNex.ChatApp.Utils;
 
+import org.DevNex.ChatApp.Objects.Message;
 import org.DevNex.ChatApp.Objects.UserStatus;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Helper
 {
@@ -85,14 +84,48 @@ public class Helper
         }
     }
 
-    public static String MapToJSON (Map<Object, Object> Target)
+    public static String MapToJSON (Map Target)
     {
         StringBuilder JSON = new StringBuilder ().append ("{");
 
         for (Object Key : Target.keySet ())
         {
-            JSON.append ("\"" + Key.toString () + "\"" + ":" + "\"" + Target.get (Key).toString () + "\"");
+            Object Value = Target.get (Key);
+
+            if (Value instanceof Collection)
+            {
+                List<Object> Objects = new ArrayList<Object> ();
+                for (Object Item : (List) Value)
+                {
+                    if (Item instanceof Message)
+                    {
+                        Message Msg = (Message) Item;
+                        Objects.add (MapToJSON (Msg.ToMap ()));
+                    }
+
+                    else
+                    {
+                        Objects.add ("\"" + Item.toString () + "\"");
+                    }
+                }
+
+                JSON.append ("\"" + Key.toString () + "\"" + ":" + Objects + ",");
+            }
+
+            else if (Value instanceof Map)
+            {
+                Map TargetMap = (Map) Value;
+                JSON.append ("\"" + Key + "\"" + ":" + MapToJSON (TargetMap));
+            }
+
+            else
+            {
+                JSON.append ("\"" + Key.toString () + "\"" + ":" + "\"" + Value.toString () + "\",");
+            }
         }
+
+        // Remove the last comma
+        JSON.deleteCharAt (JSON.toString ().length () - 1);
 
         JSON.append ("}");
 

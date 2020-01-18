@@ -41,6 +41,7 @@ public class SocketIOHandler
     private SocketIOServer Server;
     private SessionTracker Tracker;
     private DatabaseHelper DBHelper;
+    private static DatabaseHelper DBHelperClone;
     private SpaceHelper StorageHelper;
 
     public SocketIOHandler (Server Instance, SocketIOServer Server)
@@ -49,6 +50,7 @@ public class SocketIOHandler
         this.Server = Server;
         this.Tracker = Instance.GetSessionTracker ();
         this.DBHelper = Instance.GetDatabaseHelper ();
+        this.DBHelperClone = DBHelper;
         this.StorageHelper = App.GetSpaceHelper ();
 
         Listen ();
@@ -479,6 +481,11 @@ public class SocketIOHandler
         boolean UserIDMatch = DBHelper.GetUser (UserID).GetID ().equals (UserID);
 
         return TokenMatch && IDMatch && ClientIDMatch && UserTokenMatch && UserIDMatch;
+    }
+
+    public static DatabaseHelper GetDBHelper ()
+    {
+        return DBHelperClone;
     }
 
 }

@@ -1,9 +1,6 @@
 package org.DevNex.ChatApp.Objects;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Room
 {
@@ -32,7 +29,7 @@ public class Room
         Objects.put ("Display", Display);
         Objects.put ("Creator", Creator.toString ());
         Objects.put ("Clients", GetClientsString ());
-        Objects.put ("Messages", Messages.values ());
+        Objects.put ("Messages", new ArrayList<Message> (Messages.values ()));
 
         return Objects;
     }
@@ -105,6 +102,16 @@ public class Room
     public Map<UUID, Message> GetMessages ()
     {
         return Messages;
+    }
+
+    public Message GetMessage (UUID MessageID)
+    {
+        if (Messages.containsKey (MessageID))
+        {
+            return Messages.get (MessageID);
+        }
+
+        return null;
     }
 
     public void AddMessage (UUID ID, Message Object)

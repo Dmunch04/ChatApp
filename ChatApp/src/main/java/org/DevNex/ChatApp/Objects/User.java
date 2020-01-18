@@ -40,13 +40,14 @@ public class User
         return Objects;
     }
 
-    public Map<String, String> ToSafeMap ()
+    public Map<String, Object> ToSafeMap ()
     {
-        Map<String, String> Objects = new HashMap<String, String>();
+        Map<String, Object> Objects = new HashMap<String, Object>();
         Objects.put ("ID", ID.toString ());
         Objects.put ("Username", Username);
         Objects.put ("Icon", Icon);
-        Objects.put ("Rooms", GetRoomsString ());
+        //Objects.put ("Rooms", GetRoomsString ());
+        Objects.put ("Rooms", Rooms);
         Objects.put ("Status", Status.GetStatusName ());
 
         return Objects;
