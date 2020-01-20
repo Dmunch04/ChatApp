@@ -7,12 +7,6 @@ import { getRoomName, getRoom, createRoom, getUsername, sendMessage} from "../cl
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 
-var user = {};
-
-export let Rooms = withRouter(({ location }) => {
-  return <RoomsComp location={location}/>
-});
-
 function getSafe(fn, defaultVal) {
   try {
     return fn();
@@ -56,15 +50,12 @@ class CreateRoom extends React.Component {
   }
 }
 
-class RoomsComp extends React.Component {
+export class Rooms extends React.Component {
   _isMounted = false;
 
   constructor(props) {
     super(props);
-    if (this.props.location.user_obj) {
-      user = this.props.location.user_obj;
-    }
-    this.rooms_id_list = user.Rooms === "." ? [] : user.Rooms.split(",");
+    this.rooms_id_list = window.user.Rooms === "." ? [] : window.user.Rooms.split(",");
     this.state = {
       rooms: {},
       selectedRoom: "",

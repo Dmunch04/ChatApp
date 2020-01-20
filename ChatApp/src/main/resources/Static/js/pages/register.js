@@ -80,7 +80,7 @@ class RegisterField extends React.Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to={{pathname: '/rooms', user_obj: this.state.user}} component={Rooms}/>;
+      return <Redirect to={{pathname: '/rooms'}} component={Rooms}/>;
     } else {
       return (
         <form onSubmit={this.handleSubmit}>

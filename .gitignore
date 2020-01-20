@@ -179,5 +179,6 @@ fabric.properties
 ChatApp/src/main/resources/Static/node_modules/
 
 .DS_St
+.DS_Store
 
 ChatApp/src/main/resources/Config.yml
