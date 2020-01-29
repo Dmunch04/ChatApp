@@ -1,8 +1,10 @@
 'use strict';
 import React from "react";
-import { login, setToken, setUser } from "../client";
 import { Rooms } from "./rooms";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import * as userActions from "../actions/userActions";
+import userStore from "../stores/userStore";
+import { RECEIVED_USER } from "../events";
 
 export class Login extends React.Component {
   /*
@@ -31,6 +33,7 @@ export class LoginField extends React.Component {
   */
   constructor(props) {
     super(props);
+
     this.state = {username: "", password: "", error: "", redirect: false};
 
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
@@ -47,35 +50,32 @@ export class LoginField extends React.Component {
   }
 
   handleSubmit(event) {
-    login(this.state.username, this.state.password).then( user_obj => {
-        setToken(user_obj.Token);
-        setUser(user_obj);
-        this.setState({user: user_obj, redirect: true})
-      }
-    );
+    userActions.login(this.state.password, this.state.username);
     event.preventDefault();
   }
 
+  componentWillMount() {
+    userStore.addEventListener(RECEIVED_USER, () => {
+      console.log("LOADED");
+    });
+  }
+
   render() {
-    if (this.state.redirect) {
-      return <Redirect to={{pathname: '/rooms'}} component={Rooms}/>;
-    } else {
-      return (
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Username:
-            <input type="text" autoComplete="username" value={this.state.value} onChange={this.handleChangeUsername} />
-            <br/><br/>
-            Password:
-            <input type="password" autoComplete="password" value={this.state.value} onChange={this.handleChangePassword} required />
-          </label>
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Username:
+          <input type="text" autoComplete="username" value={this.state.value} onChange={this.handleChangeUsername} />
           <br/><br/>
-          {this.state.error}
-          <br/><br/>
-          <input type="submit" value="Login" />
-        </form>
-      );
-    }
+          Password:
+          <input type="password" autoComplete="password" value={this.state.value} onChange={this.handleChangePassword} required />
+        </label>
+        <br/><br/>
+        {this.state.error}
+        <br/><br/>
+        <input type="submit" value="Login" />
+      </form>
+    );
   }
 }
 
