@@ -54,10 +54,16 @@ export class LoginField extends React.Component {
     event.preventDefault();
   }
 
+  onLogin() {
+    console.log("LOADED");
+  }
+
   componentWillMount() {
-    userStore.addEventListener(RECEIVED_USER, () => {
-      console.log("LOADED");
-    });
+    userStore.addEventListener(RECEIVED_USER, this.onLogin);
+  }
+
+  componentWillUnmount() {
+    userStore.removeEventListener(RECEIVED_USER, this.onLogin);
   }
 
   render() {

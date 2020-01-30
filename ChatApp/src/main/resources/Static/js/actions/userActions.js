@@ -10,38 +10,61 @@ var sock = io("http://localhost:7089");
 export function changeToken(token) {
   dispatcher.dispatch({
     type: CHANGED_TOKEN,
-    token,
+    token: token,
   });
 }
 
 export function changeRooms(rooms) {
   dispatcher.dispatch({
     type: CHANGED_ROOMS,
-    rooms,
+    rooms: rooms,
   });
 }
 
-export function login(password, username) {
-  console.log("lol")
+export function login(password, username, timeout=30000) {
   dispatcher.dispatch({
-    type: GETTING_SALT,
+    type: GETTING_USER
   });
-  sock.emit("get-salt", username);
-  sock.on("get-salt", (salt) => {
-    console.log(salt);
-    dispatcher.dispatch({
-      type: RECEIVED_SALT
-    });
-    dispatcher.dispatch({
-      type: GETTING_USER
-    });
-    sock.emit("login", {Username: username, Password: hash(password, {salt: salt})});
-    sock.on("login", (user_obj) => {
+  new Promise((resolve, reject) => {
+    let timer;
+
+    sock.emit("get-salt", username);
+
+    function responseHandler(salt) {
+      resolve(salt);
+      clearTimeout(timer);
+    }
+
+    sock.once("get-salt", responseHandler);
+
+    timer = setTimeout(() => {
+      reject(alert("timeout waiting for salt"));
+      sock.removeListener('get-salt', responseHandler);
+    }, timeout);
+  }).then( (salt) => {
+    return new Promise((resolve, reject) => {
+      let timer;
+
+      sock.emit("login", {Username: username, Password: hash(password, {salt: salt})});
+
+      function responseHandler(user_obj) {
+        resolve(user_obj);
+        clearTimeout(timer);
+      }
+
+      sock.once("login", responseHandler);
+
+      timer = setTimeout(() => {
+        reject(alert("timeout waiting for token"));
+        sock.removeListener('login', responseHandler);
+      }, timeout);
+    }).then((user_obj) => {
       changeToken(user_obj.Token);
       changeRooms(user_obj.Rooms);
       dispatcher.dispatch({
         type: RECEIVED_USER
       });
     })
-  })
+  });
+
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-import { CHANGED_TOKEN } from "../events";
+import {CHANGED_ROOMS, CHANGED_TOKEN, RECEIVED_USER} from "../events";
 import dispatcher from "../dispatcher";
 
 class userStore extends EventTarget {
@@ -22,8 +22,8 @@ class userStore extends EventTarget {
     return this.token;
   }
 
-  login() {
-
+  receivedUser() {
+    this.dispatchEvent(new Event(RECEIVED_USER));
   }
 
   handleActions (action) {
@@ -32,7 +32,14 @@ class userStore extends EventTarget {
         this.changeToken(action.token);
         break;
       }
-      case
+      case CHANGED_ROOMS: {
+        this.login(action.rooms);
+        break;
+      }
+      case RECEIVED_USER: {
+        this.receivedUser();
+        break;
+      }
     }
   }
 }
