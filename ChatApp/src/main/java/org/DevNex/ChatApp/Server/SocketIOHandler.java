@@ -111,7 +111,7 @@ public class SocketIOHandler
                 {
                     Error Target = (Error) Result;
 
-                    // Send the User object back to the client
+                    // Send the Error object back to the client
                     Client.sendEvent (SocketIOEvents.LOGIN.GetEventName (), Target.ToMap ());
                 }
             }
@@ -353,7 +353,12 @@ public class SocketIOHandler
 
                         for (UUID UserID : TargetRoom.GetClients ())
                         {
-                            Server.getClient (Tracker.GetSessionByToken (Data.GetToken ()).GetSessionID ()).sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), TargetMessage.ToMap ());
+                            if (Tracker.HasSession (UserID))
+                            {
+                                //Server.getClient (Tracker.GetSessionByToken (Data.GetToken ()).GetSessionID ()).sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), TargetMessage.ToMap ());
+                                System.out.println (TargetMessage.ToMap ());
+                                Server.getClient (Tracker.GetSessionByID (UserID).GetSessionID ()).sendEvent (SocketIOEvents.SEND_MESSAGE.GetEventName (), TargetMessage.ToMap ());
+                            }
                         }
                     }
 

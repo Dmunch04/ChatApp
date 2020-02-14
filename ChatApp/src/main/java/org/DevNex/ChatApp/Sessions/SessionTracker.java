@@ -19,6 +19,16 @@ public class SessionTracker
         return Sessions;
     }
 
+    public boolean HasSession (UUID ID)
+    {
+        for (Session Session : Sessions)
+        {
+            if (Session.GetID ().equals (ID)) return true;
+        }
+
+        return false;
+    }
+
     public Session GetSession (UUID SessionID)
     {
         for (Session Value : Sessions)

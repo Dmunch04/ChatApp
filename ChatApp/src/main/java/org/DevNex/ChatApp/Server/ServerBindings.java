@@ -4,6 +4,7 @@ import express.DynExpress;
 import express.http.RequestMethod;
 import express.http.request.Request;
 import express.http.response.Response;
+
 import org.DevNex.ChatApp.Database.DatabaseHelper;
 import org.DevNex.ChatApp.ErrorSystem.Error;
 import org.DevNex.ChatApp.ErrorSystem.ErrorType;
@@ -21,8 +22,8 @@ public class ServerBindings
     @DynExpress (context = "/")
     public void GetIndex (Request Request, Response Response)
     {
-        Response.send (Paths.get (this.getClass ().getResource ("/Static/dist/index.html").getPath ()));
-        //Response.send (Paths.get (this.getClass ().getResource ("/TestClient/index.html").getPath ()));
+        //Response.send (Paths.get (this.getClass ().getResource ("/Static/dist/index.html").getPath ()));
+        Response.send (Paths.get (this.getClass ().getResource ("/TestClient/index.html").getPath ()));
     }
 
 

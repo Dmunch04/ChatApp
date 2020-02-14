@@ -6,12 +6,51 @@
         <title>Nex Chat</title>
 
         <script src = './JS/Libraries/socket.io.js'></script>
-        <script src = './JS/Libraries/bcryptjs.js'></script>
+        <!--<script src = './JS/Libraries/bcrypt.js'></script>-->
+
+        <script>
+            function storeSession() {
+                document.cookie = "Username=" + document.getElementById("username").value;
+            }
+        </script>
+
+        <!--
+        <style>
+            body {
+                background-image: url("https://i.imgur.com/QNW6yCX.png");
+            }
+        </style>
+        -->
+
+        <style>
+            ul {
+                list-style-type: none;
+            }
+        </style>
     </head>
 
     <body>
         <h1>Chat</h1>
+
+        <input type="text" placeholder="USERNAME" id="username" />
+        <input type="password" placeholder="PASSWORD" id="password" />
+        <button id="login" onclick="login(); storeSession()">LOGIN</button>
+
+        <br><br>
+
+        <!--<textarea id="messages" disabled></textarea>-->
+        <div id="messages" style="overflow: scroll;">
+            <ul id="messageslist">
+
+            </ul>
+        </div>
+
+        <br>
+
+        <input type="text" placeholder="MESSAGE" id="msg">
+        <button id="send" onclick="sendmsg()">SEND</button>
     </body>
 
-    <script src = './JS/Client.js'></script>
+    <!--<script src = './JS/Client.js'></script>-->
+    <script src = './JS/NewClient.js'></script>
 </html>
