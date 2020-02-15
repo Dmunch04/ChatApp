@@ -22,8 +22,8 @@ public class ServerBindings
     @DynExpress (context = "/")
     public void GetIndex (Request Request, Response Response)
     {
-        //Response.send (Paths.get (this.getClass ().getResource ("/Static/dist/index.html").getPath ()));
-        Response.send (Paths.get (this.getClass ().getResource ("/TestClient/index.html").getPath ()));
+        Response.send (Paths.get (this.getClass ().getResource ("/nexchat/dist/index.html").getPath ()));
+        //Response.send (Paths.get (this.getClass ().getResource ("/TestClient/index.html").getPath ()));
     }
 
 
