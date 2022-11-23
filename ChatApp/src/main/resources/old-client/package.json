@@ -35,7 +35,7 @@
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.1.2",
     "react-select": "^3.0.8",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "synchronized-promise": "^0.2.0",
     "utf-8-validate": "^5.0.2",
     "uws": "^100.0.1"
